@@ -1,5 +1,7 @@
 package com.example.auth.controller;
 
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import io.swagger.v3.oas.annotations.security.SecurityRequirements;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -26,6 +28,7 @@ public class EmployeeAuthController {
     private PasswordEncoder passwordEncoder;
 
     @PostMapping("/user-register")
+    @SecurityRequirements()
     public ResponseEntity<String> registerUser(@RequestBody RegisterRequestDto registerRequestDto) {
         log.info("Registering user: {}", registerRequestDto);
         registerRequestDto.setPassword(passwordEncoder.encode(registerRequestDto.getPassword()));

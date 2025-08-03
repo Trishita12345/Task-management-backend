@@ -5,15 +5,21 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 public class JWTAuthenticationToken extends AbstractAuthenticationToken {
     private final String token;
+    private final Object principal; // can store username or UserDetails
 
+    // Constructor for unauthenticated token (when only JWT string is available)
     public JWTAuthenticationToken(String token) {
         super(null);
         this.token = token;
+        this.principal = null;
         setAuthenticated(false);
     }
 
-    public JWTAuthenticationToken(UserDetails userDetails){
-        super(userDetails.getAuthorities());
+    // Constructor for authenticated token (with user details)
+    public JWTAuthenticationToken(UserDetails userDetails) {
+        super(userDetails != null ?
+                userDetails.getAuthorities() : null);
+        this.principal = userDetails;
         setAuthenticated(true);
         this.token = null;
     }
@@ -25,6 +31,6 @@ public class JWTAuthenticationToken extends AbstractAuthenticationToken {
 
     @Override
     public Object getPrincipal() {
-        return null;
+        return principal;
     }
 }

@@ -41,16 +41,21 @@ public class JWTRefreshFilter extends OncePerRequestFilter {
 
         JWTAuthenticationToken authenticationToken = new JWTAuthenticationToken(refreshToken);
         Authentication authResult = authenticationManager.authenticate(authenticationToken);
-        if (authResult.isAuthenticated()) {
-            String newToken = jwtUtil.generateToken(authResult.getName(),authResult.getAuthorities(), 15L); //15min
-            response.setHeader("Authorization", "Bearer " + newToken);
-            String refreshTokenNew = jwtUtil.generateToken(authResult.getName(),authResult.getAuthorities(), (long)7*24*60);
+        if(authResult.isAuthenticated()){
+            log.info("JWTRefreshFilter"+ authResult);
+            String token = jwtUtil.generateToken(authResult,  "access");
+            response.setHeader("Authorization", "Bearer " +token);
+            response.getWriter().write("Logged in successfully");
+            String refreshTokenNew = jwtUtil.generateToken(authResult,  "refresh");
             Cookie refreshCookie = new Cookie("refreshToken", refreshTokenNew);
             refreshCookie.setHttpOnly(true); //prevent javascript from accessing it
             refreshCookie.setSecure(false); // sent only over HTTPS
             refreshCookie.setPath("/refresh-token"); // Cookie available only for refresh endpoint
-            refreshCookie.setMaxAge(7 * 24 * 60 * 60); // 7 days expiry
+            refreshCookie.setMaxAge(120*60); // 7 days expiry
             response.addCookie(refreshCookie);
+        } else {
+            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+            response.getWriter().write("Invalid credentials");
         }
     }
 

@@ -47,10 +47,11 @@ public class JWTAuthenticationFilter extends OncePerRequestFilter {
 
             Authentication authResult = authenticationManager.authenticate(usernamePasswordAuthenticationToken);
             if(authResult.isAuthenticated()){
-                String token = jwtUtil.generateToken(authResult.getName(), authResult.getAuthorities(), 15L);
+                log.info("JWTRefreshFilter"+ authResult);
+                String token = jwtUtil.generateToken(authResult, "access");
                 response.setHeader("Authorization", "Bearer " +token);
                 response.getWriter().write("Logged in successfully");
-                String refreshToken = jwtUtil.generateToken(authResult.getName(), authResult.getAuthorities(), (long)7*24*60);
+                String refreshToken = jwtUtil.generateToken(authResult,"refresh");
                 Cookie refreshCookie = new Cookie("refreshToken", refreshToken);
                 refreshCookie.setHttpOnly(true); //prevent javascript from accessing it
                 refreshCookie.setSecure(false); // sent only over HTTPS
