@@ -31,7 +31,7 @@ public class JWTUtil {
                 .map(GrantedAuthority::getAuthority) // extract only the string
                 .toList();
         Map<String, ?> claims = Map.of("permissions", permissions);
-        long expiryMinutes = type.equals("access") ? 15L : 120L;
+        long expiryMinutes = type.equals("access") ? 60*24L : 60*24*7L;
         return Jwts.builder()
                 .subject(username)
                 .claims(claims)

@@ -15,23 +15,68 @@ import lombok.Data;
 public class Employee implements UserDetails {
 
     @Id
+    @Column(name = "id", nullable = false, updatable = false)
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
 
-    @Column(nullable = false, unique = true, updatable = false)
-    private String username;
+    @Column(name = "first_name", nullable = false)
+    private String firstname;
 
-    @Column(nullable = false)
+    @Column(name = "last_name", nullable = false)
+    private String lastname;
+
+    @Column(name = "email", nullable = false, unique = true)
+    private String email;
+
+    @Column(name = "profile_image")
+    private String profileImage;
+
+    @Column(name = "password", nullable = false)
     private String password;
 
-    // 🔹 Self-referencing relationship
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "manager_id") // foreign key column in the same table
+    // ✅ Self-reference for manager hierarchy
+    @ManyToOne
+    @JoinColumn(name = "manager_id")
     private Employee manager;
 
-    @ManyToOne(fetch = FetchType.EAGER) // each user has exactly one role
-    @JoinColumn(name = "role_id", nullable = false)
+    // ✅ Many Employees -> One Role
+    @ManyToOne
+    @JoinColumn(name = "role_id")
     private Role role;
+
+    // ✅ Many-to-Many: Employee works on many Projects
+    @ManyToMany(mappedBy = "employees", fetch = FetchType.LAZY)
+    private Set<Project> projects;
+
+    // ✅ Tasks assigned to this employee
+    @OneToMany(mappedBy = "assignedTo", fetch = FetchType.LAZY)
+    private Set<Task> assignedTasks;
+
+    // ✅ Tasks managed by this employee
+    @OneToMany(mappedBy = "managedBy", fetch = FetchType.LAZY)
+    private Set<Task> managedTasks;
+
+    // ✅ Tasks created by this employee
+    @OneToMany(mappedBy = "createdBy", fetch = FetchType.LAZY)
+    private Set<Task> createdTasks;
+
+    // ✅ Tasks updated by this employee
+    @OneToMany(mappedBy = "updatedBy", fetch = FetchType.LAZY)
+    private Set<Task> updatedTasks;
+
+    // ✅ Comments written by this employee
+    @OneToMany(mappedBy = "employee", fetch = FetchType.LAZY)
+    private Set<Comment> comments;
+
+    // ✅ Comments created by this employee (audit)
+    @OneToMany(mappedBy = "createdBy", fetch = FetchType.LAZY)
+    private Set<Comment> createdComments;
+
+    // ✅ Comments updated by this employee (audit)
+    @OneToMany(mappedBy = "updatedBy", fetch = FetchType.LAZY)
+    private Set<Comment> updatedComments;
+
+    // Getters and Setters
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
@@ -41,5 +86,14 @@ public class Employee implements UserDetails {
                 authorities.add(new SimpleGrantedAuthority(permission.getName())));
         return authorities;
     }
-    
+
+    @Override
+    public String getUsername() {
+        return email;
+    }
+
 }
+
+
+
+

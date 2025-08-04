@@ -1,6 +1,6 @@
 package com.example.auth.config;
 
-import com.example.auth.dto.LoginRequestDto;
+import com.example.auth.dto.auth.LoginRequestDto;
 import io.swagger.v3.core.converter.ModelConverters;
 import io.swagger.v3.oas.models.Components;
 import io.swagger.v3.oas.models.OpenAPI;

@@ -1,6 +1,6 @@
 package com.example.auth.provider;
 
-import com.example.auth.dto.JWTAuthenticationToken;
+import com.example.auth.dto.auth.JWTAuthenticationToken;
 import com.example.auth.service.IEmployeeService;
 import com.example.auth.util.JWTUtil;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -1,6 +1,6 @@
 package com.example.auth.filter;
 
-import com.example.auth.dto.JWTAuthenticationToken;
+import com.example.auth.dto.auth.JWTAuthenticationToken;
 import com.example.auth.util.JWTUtil;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -42,7 +42,6 @@ public class JWTRefreshFilter extends OncePerRequestFilter {
         JWTAuthenticationToken authenticationToken = new JWTAuthenticationToken(refreshToken);
         Authentication authResult = authenticationManager.authenticate(authenticationToken);
         if(authResult.isAuthenticated()){
-            log.info("JWTRefreshFilter"+ authResult);
             String token = jwtUtil.generateToken(authResult,  "access");
             response.setHeader("Authorization", "Bearer " +token);
             response.getWriter().write("Logged in successfully");

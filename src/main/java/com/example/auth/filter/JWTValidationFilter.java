@@ -1,6 +1,6 @@
 package com.example.auth.filter;
 
-import com.example.auth.dto.JWTAuthenticationToken;
+import com.example.auth.dto.auth.JWTAuthenticationToken;
 import com.example.auth.util.PublicEndPoints;
 import com.example.auth.util.JWTUtil;
 import jakarta.servlet.FilterChain;
@@ -13,7 +13,6 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
-import org.springframework.util.AntPathMatcher;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
@@ -41,7 +40,6 @@ public class JWTValidationFilter extends OncePerRequestFilter {
             Authentication authResult = authenticationManager.authenticate(jwtAuthenticationToken);
             if(authResult.isAuthenticated()) {
                 SecurityContextHolder.getContext().setAuthentication(authResult);
-                log.info("Auth Result: "+ authResult);
                 filterChain.doFilter(request, response);
             }
         } else {

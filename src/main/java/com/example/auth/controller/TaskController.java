@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @Slf4j
 @RestController
-@RequestMapping(path = "/tasks")
+@RequestMapping(path = "/task")
 public class TaskController {
 
     @GetMapping

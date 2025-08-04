@@ -1,6 +1,6 @@
 package com.example.auth.filter;
 
-import com.example.auth.dto.LoginRequestDto;
+import com.example.auth.dto.auth.LoginRequestDto;
 import com.example.auth.util.JWTUtil;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.FilterChain;
@@ -43,11 +43,10 @@ public class JWTAuthenticationFilter extends OncePerRequestFilter {
             return;
         } else {
             UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken =
-                    new UsernamePasswordAuthenticationToken(loginRequestDto.getUsername(), loginRequestDto.getPassword());
+                    new UsernamePasswordAuthenticationToken(loginRequestDto.getEmail(), loginRequestDto.getPassword());
 
             Authentication authResult = authenticationManager.authenticate(usernamePasswordAuthenticationToken);
             if(authResult.isAuthenticated()){
-                log.info("JWTRefreshFilter"+ authResult);
                 String token = jwtUtil.generateToken(authResult, "access");
                 response.setHeader("Authorization", "Bearer " +token);
                 response.getWriter().write("Logged in successfully");

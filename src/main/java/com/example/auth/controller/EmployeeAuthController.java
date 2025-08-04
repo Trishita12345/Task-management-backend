@@ -1,12 +1,11 @@
 package com.example.auth.controller;
 
-import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import com.example.auth.dto.auth.RegisterRequestDto;
 import io.swagger.v3.oas.annotations.security.SecurityRequirements;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.example.auth.dto.RegisterRequestDto;
 import com.example.auth.service.IEmployeeService;
 
 import org.springframework.beans.factory.annotation.Autowired;
