@@ -1,5 +1,6 @@
 package com.example.auth.filter;
 
+import com.example.auth.constants.Constants;
 import com.example.auth.dto.auth.LoginRequestDto;
 import com.example.auth.util.JWTUtil;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -20,8 +21,6 @@ import java.io.IOException;
 @Slf4j
 @Component
 public class JWTAuthenticationFilter extends OncePerRequestFilter {
-    @Autowired
-    private JWTUtil jwtUtil;
     @Autowired
     private AuthenticationManager authenticationManager;
 
@@ -47,15 +46,22 @@ public class JWTAuthenticationFilter extends OncePerRequestFilter {
 
             Authentication authResult = authenticationManager.authenticate(usernamePasswordAuthenticationToken);
             if(authResult.isAuthenticated()){
-                String token = jwtUtil.generateToken(authResult, "access");
-                response.setHeader("Authorization", "Bearer " +token);
+                String token = JWTUtil.generateToken(authResult, "access");
+                //response.setHeader("Authorization", "Bearer " +token);
+                Cookie accessCookie = new Cookie("accessToken", token);
+                accessCookie.setHttpOnly(false); //javascript can access it
+                accessCookie.setSecure(false); // sent only over HTTPS
+                accessCookie.setPath("/"); // Cookie available for all endpoints
+                accessCookie.setMaxAge(Constants.ACCESS_TOKEN_EXPIRATION_TIME); // 1 days expiry
+                response.addCookie(accessCookie);
                 response.getWriter().write("Logged in successfully");
-                String refreshToken = jwtUtil.generateToken(authResult,"refresh");
+                //Refresh token
+                String refreshToken = JWTUtil.generateToken(authResult,"refresh");
                 Cookie refreshCookie = new Cookie("refreshToken", refreshToken);
                 refreshCookie.setHttpOnly(true); //prevent javascript from accessing it
                 refreshCookie.setSecure(false); // sent only over HTTPS
                 refreshCookie.setPath("/refresh-token"); // Cookie available only for refresh endpoint
-                refreshCookie.setMaxAge(7 * 24 * 60 * 60); // 7 days expiry
+                refreshCookie.setMaxAge(Constants.REFRESH_TOKEN_EXPIRATION_TIME); // 7 days expiry
                 response.addCookie(refreshCookie);
             } else {
                 response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);

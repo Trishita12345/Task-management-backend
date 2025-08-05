@@ -2,13 +2,16 @@ package com.example.auth.model;
 
 import com.example.auth.model.Employee;
 import jakarta.persistence.*;
+import lombok.Data;
+
 import java.time.LocalDateTime;
 import java.util.Set;
 import java.util.UUID;
 
 @Entity
-@Table(name = "project")
-public class Project {
+@Table(name = "projects")
+@Data
+public class Project extends AuditEntity{
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -25,20 +28,6 @@ public class Project {
     @ManyToOne
     @JoinColumn(name = "manager_id")
     private Employee manager;
-
-    @Column(name = "created_at", nullable = false)
-    private LocalDateTime createdAt;
-
-    @Column(name = "updated_at")
-    private LocalDateTime updatedAt;
-
-    @ManyToOne
-    @JoinColumn(name = "created_by")
-    private Employee createdBy;
-
-    @ManyToOne
-    @JoinColumn(name = "updated_by")
-    private Employee updatedBy;
 
     // ✅ Many-to-Many: Employees working on this project
     @ManyToMany

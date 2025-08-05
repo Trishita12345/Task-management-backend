@@ -1,5 +1,6 @@
 package com.example.auth.dto.auth;
 
+import com.example.auth.model.Employee;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
@@ -20,10 +21,10 @@ public class JWTAuthenticationToken extends AbstractAuthenticationToken {
     }
 
     // Constructor for authenticated token (with user details)
-    public JWTAuthenticationToken(UserDetails userDetails) {
-        super(userDetails != null ?
-                userDetails.getAuthorities() : null);
-        this.principal = userDetails;
+    public JWTAuthenticationToken(Employee employee){
+        super(employee != null ?
+                employee.getAuthorities() : null);
+        this.principal = employee;
         setAuthenticated(true);
         this.token = null;
     }

@@ -2,16 +2,19 @@ package com.example.auth.model;
 
 import com.example.auth.model.Employee;
 import jakarta.persistence.*;
+import lombok.Data;
+
 import java.time.LocalDateTime;
 import java.util.Set;
 import java.util.UUID;
 
+@Data
 @Entity
-@Table(name = "task")
-public class Task {
+@Table(name = "tasks")
+public class Task extends AuditEntity {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.UUID)
     @Column(name = "task_id", nullable = false, updatable = false)
     private UUID taskId;
 
@@ -26,7 +29,7 @@ public class Task {
 
     @Enumerated(EnumType.STRING)
     @Column(name = "status", nullable = false)
-    private TaskStatus status;
+    private TaskStatus status = TaskStatus.NEW;
 
     // ✅ Assigned to Employee
     @ManyToOne
@@ -49,20 +52,6 @@ public class Task {
     @Column(name = "end_date")
     private LocalDateTime endDate;
 
-    @Column(name = "created_at", nullable = false)
-    private LocalDateTime createdAt;
-
-    @Column(name = "updated_at")
-    private LocalDateTime updatedAt;
-
-    @ManyToOne
-    @JoinColumn(name = "created_by")
-    private Employee createdBy;
-
-    @ManyToOne
-    @JoinColumn(name = "updated_by")
-    private Employee
-            updatedBy;
 
     // ✅ One Task -> Many Comments
     @OneToMany(mappedBy = "task", cascade = CascadeType.ALL, orphanRemoval = true)

@@ -1,5 +1,6 @@
 package com.example.auth.filter;
 
+import com.example.auth.constants.Constants;
 import com.example.auth.dto.auth.JWTAuthenticationToken;
 import com.example.auth.util.JWTUtil;
 import jakarta.servlet.FilterChain;
@@ -21,8 +22,6 @@ import java.io.IOException;
 public class JWTRefreshFilter extends OncePerRequestFilter {
 
     @Autowired
-    private JWTUtil jwtUtil;
-    @Autowired
     private AuthenticationManager authenticationManager;
 
     @Override
@@ -33,7 +32,7 @@ public class JWTRefreshFilter extends OncePerRequestFilter {
             return;
         }
 
-        String refreshToken = extractJwtFromRequest(request);
+        String refreshToken = JWTUtil.extractJWTTokenFromRequestCookie(request, "refreshToken");
         if (refreshToken == null) {
             response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
             return;
@@ -42,34 +41,26 @@ public class JWTRefreshFilter extends OncePerRequestFilter {
         JWTAuthenticationToken authenticationToken = new JWTAuthenticationToken(refreshToken);
         Authentication authResult = authenticationManager.authenticate(authenticationToken);
         if(authResult.isAuthenticated()){
-            String token = jwtUtil.generateToken(authResult,  "access");
-            response.setHeader("Authorization", "Bearer " +token);
+            String token = JWTUtil.generateToken(authResult,  "access");
+           // response.setHeader("Authorization", "Bearer " +token);
+            Cookie accessCookie = new Cookie("accessToken", token);
+            accessCookie.setHttpOnly(false); //javascript can access it
+            accessCookie.setSecure(false); // sent only over HTTPS
+            accessCookie.setPath("/"); // Cookie available for all endpoints
+            accessCookie.setMaxAge(Constants.ACCESS_TOKEN_EXPIRATION_TIME); // 1 days expiry
+            response.addCookie(accessCookie);
             response.getWriter().write("Logged in successfully");
-            String refreshTokenNew = jwtUtil.generateToken(authResult,  "refresh");
+            //Refresh token
+            String refreshTokenNew = JWTUtil.generateToken(authResult,"refresh");
             Cookie refreshCookie = new Cookie("refreshToken", refreshTokenNew);
             refreshCookie.setHttpOnly(true); //prevent javascript from accessing it
             refreshCookie.setSecure(false); // sent only over HTTPS
             refreshCookie.setPath("/refresh-token"); // Cookie available only for refresh endpoint
-            refreshCookie.setMaxAge(120*60); // 7 days expiry
+            refreshCookie.setMaxAge(Constants.REFRESH_TOKEN_EXPIRATION_TIME); // 7 days expiry
             response.addCookie(refreshCookie);
         } else {
             response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
             response.getWriter().write("Invalid credentials");
         }
-    }
-
-    private String extractJwtFromRequest(HttpServletRequest request) {
-        Cookie[] cookies = request.getCookies();
-        if (cookies == null) {
-            return null;
-        }
-
-        String refreshToken = null;
-        for (Cookie cookie : cookies) {
-            if ("refreshToken".equals(cookie.getName())) {
-                refreshToken = cookie.getValue();
-            }
-        }
-        return refreshToken;
     }
 }

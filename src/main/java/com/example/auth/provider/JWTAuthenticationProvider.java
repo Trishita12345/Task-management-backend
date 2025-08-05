@@ -1,6 +1,7 @@
 package com.example.auth.provider;
 
 import com.example.auth.dto.auth.JWTAuthenticationToken;
+import com.example.auth.model.Employee;
 import com.example.auth.service.IEmployeeService;
 import com.example.auth.util.JWTUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,19 +14,17 @@ import org.springframework.stereotype.Component;
 @Component
 public class JWTAuthenticationProvider implements AuthenticationProvider {
     @Autowired
-    private JWTUtil jwtUtil;
-    @Autowired
-    private IEmployeeService userService;
+    private IEmployeeService employeeService;
 
     @Override
     public Authentication authenticate(Authentication authentication) {
         String token = ((JWTAuthenticationToken) authentication).getCredentials().toString();
-        String username = jwtUtil.validateAndExtractUsername(token);
+        String username = JWTUtil.validateAndExtractUsername(token);
         if(username == null){
             throw new BadCredentialsException("Invalid token");
         }
-        UserDetails userDetails = userService.loadUserByUsername(username);
-        return new JWTAuthenticationToken(userDetails);
+        Employee employee = employeeService.getEmployeeByEmailId(username);
+        return new JWTAuthenticationToken(employee);
     }
 
     @Override

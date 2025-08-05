@@ -1,8 +1,11 @@
 package com.example.auth.util;
 
+import com.example.auth.constants.Constants;
 import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
@@ -17,13 +20,10 @@ import java.util.List;
 import java.util.Map;
 
 @Slf4j
-@Component
 public class JWTUtil {
-    private static final String SECRET_KEY = "your-secret-key-your-secret-key-your-secret-key-your-secret-key-your-secret-key";
-    private static final Key key = Keys.hmacShaKeyFor(SECRET_KEY.getBytes(StandardCharsets.UTF_8));
+    private static final Key key = Keys.hmacShaKeyFor(Constants.JWT_SECRET.getBytes(StandardCharsets.UTF_8));
 
-
-    public String generateToken(Authentication authentication, String type){
+    public static String generateToken(Authentication authentication, String type){
         String username = authentication.getName();
         Collection<? extends GrantedAuthority> authorities = authentication.getAuthorities();
         List<String> permissions = authorities
@@ -31,7 +31,7 @@ public class JWTUtil {
                 .map(GrantedAuthority::getAuthority) // extract only the string
                 .toList();
         Map<String, ?> claims = Map.of("permissions", permissions);
-        long expiryMinutes = type.equals("access") ? 60*24L : 60*24*7L;
+        long expiryMinutes = type.equals("access") ? Constants.ACCESS_TOKEN_EXPIRATION_TIME : Constants.REFRESH_TOKEN_EXPIRATION_TIME;
         return Jwts.builder()
                 .subject(username)
                 .claims(claims)
@@ -42,7 +42,7 @@ public class JWTUtil {
                 .compact();
     }
 
-    public String validateAndExtractUsername(String token){
+    public static String validateAndExtractUsername(String token){
         try {
             return Jwts.parser()
                     .setSigningKey(key)
@@ -54,5 +54,20 @@ public class JWTUtil {
             log.info("exception extracting username: "+e.getMessage());
             return null;
         }
+    }
+
+    public static String extractJWTTokenFromRequestCookie(HttpServletRequest request, String cookieName) {
+        Cookie[] cookies = request.getCookies();
+        if (cookies == null) {
+            return null;
+        }
+
+        String token = null;
+        for (Cookie cookie : cookies) {
+            if (cookieName.equals(cookie.getName())) {
+                token = cookie.getValue();
+            }
+        }
+        return token;
     }
 }

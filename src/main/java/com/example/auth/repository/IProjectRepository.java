@@ -4,8 +4,9 @@ import com.example.auth.model.Project;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.querydsl.QuerydslPredicateExecutor;
 
-public interface IProjectRepository extends JpaRepository<Project, Long> {
+public interface IProjectRepository extends JpaRepository<Project, Long> , QuerydslPredicateExecutor<Project> {
     Page<Project> findByNameContainingIgnoreCaseOrDetailsContainingIgnoreCase(
             String name,
             String details,

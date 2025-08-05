@@ -21,8 +21,6 @@ import java.io.IOException;
 @Component
 public class JWTValidationFilter extends OncePerRequestFilter {
     @Autowired
-    private JWTUtil jwtUtil;
-    @Autowired
     private AuthenticationManager authenticationManager;
 
     @Override
@@ -34,7 +32,7 @@ public class JWTValidationFilter extends OncePerRequestFilter {
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
-        String token = extractJWTTokenFromRequest(request);
+        String token = JWTUtil.extractJWTTokenFromRequestCookie(request, "accessToken");
         if(token != null){
             JWTAuthenticationToken jwtAuthenticationToken = new JWTAuthenticationToken(token);
             Authentication authResult = authenticationManager.authenticate(jwtAuthenticationToken);
@@ -48,11 +46,11 @@ public class JWTValidationFilter extends OncePerRequestFilter {
         }
     }
 
-    private String extractJWTTokenFromRequest (HttpServletRequest request) {
-        String authHeader = request.getHeader("Authorization");
-        if(authHeader != null && authHeader.startsWith("Bearer ")) {
-            return authHeader.substring(7);
-        }
-        return null;
-    }
+//    private String extractJWTTokenFromRequest (HttpServletRequest request) {
+//        String authHeader = request.getHeader("Authorization");
+//        if(authHeader != null && authHeader.startsWith("Bearer ")) {
+//            return authHeader.substring(7);
+//        }
+//        return null;
+//    }
 }

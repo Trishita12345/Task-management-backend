@@ -1,6 +1,7 @@
 package com.example.auth.service;
 
 import java.util.NoSuchElementException;
+import java.util.UUID;
 
 import com.example.auth.dto.auth.JWTAuthenticationToken;
 import com.example.auth.dto.auth.RegisterRequestDto;
@@ -28,6 +29,8 @@ public class EmployeeService implements IEmployeeService {
                 .orElseThrow(() -> new NoSuchElementException("User not found"));
     }
 
+
+
     @Override
     public Employee saveUser(RegisterRequestDto registerRequestDto) {
         Role role = roleRepository.findByName("EMPLOYEE")
@@ -45,5 +48,11 @@ public class EmployeeService implements IEmployeeService {
             throw new RuntimeException("User Already Exists");
         }
     }
-    
+
+    @Override
+    public Employee getEmployeeByEmailId(String email) {
+        return employeeRepository.findByEmail(email)
+                .orElseThrow(() -> new NoSuchElementException("User not found"));
+    }
+
 }
