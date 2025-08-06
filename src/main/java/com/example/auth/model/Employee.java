@@ -2,6 +2,7 @@ package com.example.auth.model;
 
 import java.util.*;
 
+import com.example.auth.constants.Constants;
 import jakarta.persistence.*;
 import lombok.ToString;
 import org.springframework.security.core.GrantedAuthority;
@@ -12,7 +13,7 @@ import lombok.Data;
 
 @Entity
 @Data
-@Table(name = "EMPLOYEES")
+@Table(name = Constants.EMPLOYEES)
 //@ToString(exclude = {"assignedTasks", "managedTasks", "createdTasks", "updatedTasks", "createdProjects", "updatedProjects", "createdComments", "updatedComments"})
 public class Employee implements UserDetails {
 

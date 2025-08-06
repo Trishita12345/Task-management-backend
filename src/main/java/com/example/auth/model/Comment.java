@@ -1,12 +1,13 @@
 package com.example.auth.model;
 
+import com.example.auth.constants.Constants;
 import com.example.auth.model.Employee;
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Entity
-@Table(name = "comments")
+@Table(name = Constants.COMMENTS)
 public class Comment extends AuditEntity{
 
     @Id

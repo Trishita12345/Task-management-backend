@@ -1,5 +1,6 @@
 package com.example.auth.filter;
 
+import com.example.auth.constants.Constants;
 import com.example.auth.dto.auth.JWTAuthenticationToken;
 import com.example.auth.util.PublicEndPoints;
 import com.example.auth.util.JWTUtil;
@@ -32,7 +33,7 @@ public class JWTValidationFilter extends OncePerRequestFilter {
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
-        String token = JWTUtil.extractJWTTokenFromRequestCookie(request, "accessToken");
+        String token = JWTUtil.extractJWTTokenFromRequestCookie(request, Constants.ACCESS);
         if(token != null){
             JWTAuthenticationToken jwtAuthenticationToken = new JWTAuthenticationToken(token);
             Authentication authResult = authenticationManager.authenticate(jwtAuthenticationToken);

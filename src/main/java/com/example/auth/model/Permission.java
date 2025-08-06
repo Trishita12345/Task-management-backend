@@ -1,5 +1,6 @@
 package com.example.auth.model;
 
+import com.example.auth.constants.Constants;
 import jakarta.persistence.*;
 import lombok.Data;
 import org.aspectj.apache.bcel.generic.TABLESWITCH;
@@ -7,7 +8,7 @@ import org.aspectj.apache.bcel.generic.TABLESWITCH;
 import java.util.HashSet;
 import java.util.Set;
 
-@Entity(name = "PERMISSIONS")
+@Entity(name = Constants.PERMISSIONS)
 @Data
 public class Permission {
 

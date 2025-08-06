@@ -1,5 +1,6 @@
 package com.example.auth.model;
 
+import com.example.auth.constants.Constants;
 import com.example.auth.model.Employee;
 import jakarta.persistence.*;
 import lombok.Data;
@@ -10,7 +11,7 @@ import java.util.UUID;
 
 @Data
 @Entity
-@Table(name = "tasks")
+@Table(name = Constants.TASKS)
 public class Task extends AuditEntity {
 
     @Id
@@ -24,12 +25,13 @@ public class Task extends AuditEntity {
     @Column(name = "task_description", columnDefinition = "TEXT")
     private String taskDescription;
 
+    @Enumerated(EnumType.STRING)
     @Column(name = "priority", nullable = false)
-    private String priority;
+    private Priority priority;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "status", nullable = false)
-    private TaskStatus status = TaskStatus.NEW;
+    private TaskStatus status = TaskStatus.TO_DO;
 
     // ✅ Assigned to Employee
     @ManyToOne

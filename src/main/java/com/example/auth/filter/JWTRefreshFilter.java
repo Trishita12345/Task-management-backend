@@ -41,9 +41,9 @@ public class JWTRefreshFilter extends OncePerRequestFilter {
         JWTAuthenticationToken authenticationToken = new JWTAuthenticationToken(refreshToken);
         Authentication authResult = authenticationManager.authenticate(authenticationToken);
         if(authResult.isAuthenticated()){
-            String token = JWTUtil.generateToken(authResult,  "access");
+            String token = JWTUtil.generateToken(authResult,  Constants.ACCESS);
            // response.setHeader("Authorization", "Bearer " +token);
-            Cookie accessCookie = new Cookie("accessToken", token);
+            Cookie accessCookie = new Cookie(Constants.ACCESS, token);
             accessCookie.setHttpOnly(false); //javascript can access it
             accessCookie.setSecure(false); // sent only over HTTPS
             accessCookie.setPath("/"); // Cookie available for all endpoints
@@ -51,8 +51,8 @@ public class JWTRefreshFilter extends OncePerRequestFilter {
             response.addCookie(accessCookie);
             response.getWriter().write("Logged in successfully");
             //Refresh token
-            String refreshTokenNew = JWTUtil.generateToken(authResult,"refresh");
-            Cookie refreshCookie = new Cookie("refreshToken", refreshTokenNew);
+            String refreshTokenNew = JWTUtil.generateToken(authResult,Constants.REFRESH);
+            Cookie refreshCookie = new Cookie(Constants.REFRESH, refreshTokenNew);
             refreshCookie.setHttpOnly(true); //prevent javascript from accessing it
             refreshCookie.setSecure(false); // sent only over HTTPS
             refreshCookie.setPath("/refresh-token"); // Cookie available only for refresh endpoint

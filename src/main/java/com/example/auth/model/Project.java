@@ -1,5 +1,6 @@
 package com.example.auth.model;
 
+import com.example.auth.constants.Constants;
 import com.example.auth.model.Employee;
 import jakarta.persistence.*;
 import lombok.Data;
@@ -9,7 +10,7 @@ import java.util.Set;
 import java.util.UUID;
 
 @Entity
-@Table(name = "projects")
+@Table(name = Constants.PROJECTS)
 @Data
 public class Project extends AuditEntity{
 

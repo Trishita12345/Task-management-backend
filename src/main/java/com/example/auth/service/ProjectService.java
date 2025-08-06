@@ -1,5 +1,6 @@
 package com.example.auth.service;
 
+import com.example.auth.constants.Constants;
 import com.example.auth.dto.project.ProjectAddRequestDTO;
 import com.example.auth.dto.project.ProjectResponseDTO;
 import com.example.auth.model.Employee;
@@ -17,7 +18,9 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Set;
+import java.util.UUID;
 
 @Service
 public class ProjectService implements IProjectService{
@@ -32,12 +35,15 @@ public class ProjectService implements IProjectService{
     @Override
     public Page<ProjectResponseDTO> getProjects(String query, Pageable pageable) {
         Page<Project> projects;
+        Employee currentUser = SecurityUtil.getCurrentEmployee();
         if (query == null || query.trim().isEmpty()) {
             // No search query → return all
-            projects = projectRepository.findAll(pageable);
+            projects = projectRepository.findAll(ProjectPredicate.findByEmployeeId(currentUser.getId()), pageable);
         } else {
             // Search by name or details
-            projects = projectRepository.findAll(ProjectPredicate.findByQuery(query, query), pageable);
+            projects = projectRepository.findAll(
+                     ProjectPredicate.findByQuery(query, query)
+                    .and(ProjectPredicate.findByEmployeeId(currentUser.getId())), pageable);
         }
         return projects.map(projectResponseMapper::toResponse);
     }
@@ -46,17 +52,28 @@ public class ProjectService implements IProjectService{
     @Transactional
     public ProjectResponseDTO createProject(ProjectAddRequestDTO dto) {
         Employee currentUser = SecurityUtil.getCurrentEmployee();
-        if (currentUser == null) {
-            throw new RuntimeException("Unauthorized: No authenticated user found");
-        }
-
         Project project = new Project();
         project.setName(dto.getName());
         project.setDetails(dto.getDetails());
         project.setEmployees(Set.of(currentUser));
         Project response_project = projectRepository.save(project);
-        Hibernate.initialize(response_project.getEmployees());
         // ✅ Convert to response DTO
         return projectResponseMapper.toResponse(response_project);
+    }
+
+    @Override
+    public ProjectResponseDTO updateProject(Long projectId, ProjectAddRequestDTO dto) {
+        Project project = projectRepository.findById(projectId).orElseThrow(() -> new NoSuchElementException(Constants.PROJECT_NOT_FOUND));
+        project.setName(dto.getName());
+        project.setDetails(dto.getDetails());
+        Project response_project = projectRepository.save(project);
+        // ✅ Convert to response DTO
+        return projectResponseMapper.toResponse(response_project);
+    }
+
+    @Override
+    public ProjectResponseDTO getProjectById(Long projectId) {
+        Project project = projectRepository.findById(projectId).orElseThrow(() -> new NoSuchElementException(Constants.PROJECT_NOT_FOUND));
+        return projectResponseMapper.toResponse(project);
     }
 }

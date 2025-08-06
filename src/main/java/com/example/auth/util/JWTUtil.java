@@ -30,12 +30,12 @@ public class JWTUtil {
                 .stream()
                 .map(GrantedAuthority::getAuthority) // extract only the string
                 .toList();
-        Map<String, ?> claims = Map.of("permissions", permissions);
-        long expiryMinutes = type.equals("access") ? Constants.ACCESS_TOKEN_EXPIRATION_TIME : Constants.REFRESH_TOKEN_EXPIRATION_TIME;
+        Map<String, ?> claims = Map.of(Constants.PERMISSIONS, permissions);
+        long expiryMinutes = type.equals(Constants.ACCESS) ? Constants.ACCESS_TOKEN_EXPIRATION_TIME : Constants.REFRESH_TOKEN_EXPIRATION_TIME;
         return Jwts.builder()
                 .subject(username)
                 .claims(claims)
-                .claim("type", type)
+                .claim(Constants.TYPE, type)
                 .issuedAt(new Date())
                 .expiration(new Date(System.currentTimeMillis() + expiryMinutes * 60 * 1000))
                 .signWith(key)

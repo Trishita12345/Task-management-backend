@@ -1,11 +1,9 @@
 package com.example.auth.model;
 
 public enum TaskStatus {
-    NEW,
-    ON_HOLD,
+    TO_DO,
     IN_PROGRESS,
-    REVIEW,
+    QA,
     DONE,
-    BLOCKED
 }
 

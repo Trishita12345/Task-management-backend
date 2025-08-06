@@ -1,5 +1,6 @@
 package com.example.auth.model;
 
+import com.example.auth.constants.Constants;
 import jakarta.persistence.*;
 import lombok.Data;
 
@@ -8,7 +9,7 @@ import java.util.Set;
 
 @Data
 @Entity
-@Table(name = "roles")
+@Table(name = Constants.ROLES)
 public class Role {
 
     @Id
