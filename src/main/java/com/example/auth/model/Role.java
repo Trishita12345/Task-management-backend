@@ -4,6 +4,7 @@ import com.example.auth.constants.Constants;
 import com.example.auth.model.enums.SelectOption;
 import jakarta.persistence.*;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -12,7 +13,12 @@ import java.util.UUID;
 @Data
 @Entity
 @Table(name = Constants.ROLES)
+@NoArgsConstructor
 public class Role implements SelectOption<UUID> {
+
+    public Role(String name){
+        this.name = name;
+    }
 
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
