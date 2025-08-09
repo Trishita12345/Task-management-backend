@@ -1,20 +1,18 @@
-package com.example.auth.service;
-
-import java.util.NoSuchElementException;
-import java.util.UUID;
+package com.example.auth.service.impl;
 
 import com.example.auth.constants.Constants;
-import com.example.auth.dto.auth.JWTAuthenticationToken;
-import com.example.auth.dto.auth.RegisterRequestDto;
+import com.example.auth.model.Employee;
 import com.example.auth.model.Role;
+import com.example.auth.model.dto.auth.RegisterRequestDto;
+import com.example.auth.repository.IEmployeeRepository;
 import com.example.auth.repository.IRoleRepository;
+import com.example.auth.service.IEmployeeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
-import com.example.auth.model.Employee;
-import com.example.auth.repository.IEmployeeRepository;
+import java.util.NoSuchElementException;
 
 @Service
 public class EmployeeService implements IEmployeeService {
@@ -34,7 +32,11 @@ public class EmployeeService implements IEmployeeService {
 
     @Override
     public Employee saveUser(RegisterRequestDto registerRequestDto) {
-        Role role = roleRepository.findByName(Constants.DEFAULT_EMPLOYEE_TYPE)
+        return createEmployeeByRole(registerRequestDto, Constants.DEFAULT_EMPLOYEE_TYPE);
+    }
+
+    private Employee createEmployeeByRole(RegisterRequestDto registerRequestDto, String employeeType) {
+        Role role = roleRepository.findByName(employeeType)
                 .orElseThrow(() -> new RuntimeException("Role not present in DB"));
         Employee employee = new Employee();
         employee.setFirstname(registerRequestDto.getFirstname());
@@ -54,6 +56,11 @@ public class EmployeeService implements IEmployeeService {
     public Employee getEmployeeByEmailId(String email) {
         return employeeRepository.findByEmail(email)
                 .orElseThrow(() -> new NoSuchElementException(Constants.USER_NOT_FOUND));
+    }
+
+    @Override
+    public Employee saveAdmin(RegisterRequestDto registerRequestDto) {
+        return createEmployeeByRole(registerRequestDto, Constants.SUPER_ADMIN);
     }
 
 }

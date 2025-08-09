@@ -1,20 +1,22 @@
 package com.example.auth.model;
 
 import com.example.auth.constants.Constants;
+import com.example.auth.model.enums.SelectOption;
 import jakarta.persistence.*;
 import lombok.Data;
 
 import java.util.HashSet;
 import java.util.Set;
+import java.util.UUID;
 
 @Data
 @Entity
 @Table(name = Constants.ROLES)
-public class Role {
+public class Role implements SelectOption<UUID> {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    @GeneratedValue(strategy = GenerationType.UUID)
+    private UUID id;
 
     @Column(nullable = false, unique = true)
     private String name; // e.g., "ADMIN", "USER"
@@ -26,6 +28,16 @@ public class Role {
             inverseJoinColumns = @JoinColumn(name = "permission_id")
     )
     private Set<Permission> permissions = new HashSet<>();
+
+    @Override
+    public String getLabel() {
+        return name;
+    }
+
+    @Override
+    public UUID getValue() {
+        return id;
+    }
 
 //    @OneToMany(mappedBy = "role")  // <-- one role can be assigned to many users
 //    private Set<Employee> employees = new HashSet<>();

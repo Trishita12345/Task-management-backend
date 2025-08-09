@@ -1,4 +1,4 @@
-package com.example.auth.dto.common;
+package com.example.auth.model.dto.common;
 
 import lombok.Data;
 

@@ -1,21 +1,23 @@
 package com.example.auth.model;
 
-import java.util.*;
-
 import com.example.auth.constants.Constants;
+import com.example.auth.model.enums.SelectOption;
 import jakarta.persistence.*;
-import lombok.ToString;
+import lombok.Data;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import lombok.Data;
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.Set;
+import java.util.UUID;
 
 @Entity
 @Data
 @Table(name = Constants.EMPLOYEES)
 //@ToString(exclude = {"assignedTasks", "managedTasks", "createdTasks", "updatedTasks", "createdProjects", "updatedProjects", "createdComments", "updatedComments"})
-public class Employee implements UserDetails {
+public class Employee implements UserDetails, SelectOption<UUID> {
 
     @Id
     @Column(name = "id", nullable = false, updatable = false)
@@ -38,14 +40,25 @@ public class Employee implements UserDetails {
     private String password;
 
     // ✅ Self-reference for manager hierarchy
+    // ❌NOT USING NOW
     @ManyToOne
     @JoinColumn(name = "manager_id")
     private Employee manager;
 
     // ✅ Many Employees -> One Role
-    @ManyToOne
+    @ManyToOne()
     @JoinColumn(name = "role_id")
     private Role role;
+
+    @Override
+    public String getLabel() {
+        return firstname+" "+lastname;
+    }
+
+    @Override
+    public UUID getValue() {
+        return id;
+    }
 
 //    // ✅ Many-to-Many: Employee works on many Projects
 //    @ManyToMany(mappedBy = "employees", fetch = FetchType.LAZY)
@@ -77,11 +90,11 @@ public class Employee implements UserDetails {
 //
 //    // ✅ Comments created by this employee (audit)
 //    @OneToMany(mappedBy = "createdBy", fetch = FetchType.LAZY)
-//    private Set<Comment> createdComments;
+//    private Set<CommentController> createdComments;
 //
 //    // ✅ Comments updated by this employee (audit)
 //    @OneToMany(mappedBy = "updatedBy", fetch = FetchType.LAZY)
-//    private Set<Comment> updatedComments;
+//    private Set<CommentController> updatedComments;
 
     // Getters and Setters
 

@@ -8,7 +8,7 @@ public class PublicEndPoints {
 
     private static final AntPathMatcher pathMatcher = new AntPathMatcher();
     private static final List<String> PUBLIC_PATTERNS = List.of(
-            "/auth/**",
+            "/auth/user-register",
             "/h2-console/**",
             "/error/",
             "/refresh-token",

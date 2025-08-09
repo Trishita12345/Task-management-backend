@@ -1,7 +1,11 @@
 package com.example.auth.model;
 
 import com.example.auth.constants.Constants;
-import com.example.auth.model.Employee;
+import com.example.auth.model.enums.Priority;
+import com.example.auth.model.enums.TaskStatus;
+import com.example.auth.model.enums.TaskType;
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.Data;
 
@@ -12,6 +16,7 @@ import java.util.UUID;
 @Data
 @Entity
 @Table(name = Constants.TASKS)
+
 public class Task extends AuditEntity {
 
     @Id
@@ -27,25 +32,30 @@ public class Task extends AuditEntity {
 
     @Enumerated(EnumType.STRING)
     @Column(name = "priority", nullable = false)
-    private Priority priority;
+    private Priority priority = Priority.P1;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "status", nullable = false)
-    private TaskStatus status = TaskStatus.TO_DO;
+    private TaskStatus status = TaskStatus.TODO;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "type", nullable = false)
+    private TaskType type = TaskType.STORY;
 
     // ✅ Assigned to Employee
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "assigned_to")
     private Employee assignedTo;
 
     // ✅ Managed by Employee
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "managed_by")
     private Employee managedBy;
 
     // ✅ Belongs to Project
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "project_id")
+    @JsonBackReference
     private Project project;
 
     @Column(name = "start_date")
@@ -56,7 +66,8 @@ public class Task extends AuditEntity {
 
 
     // ✅ One Task -> Many Comments
-    @OneToMany(mappedBy = "task", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "task", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+    @JsonManagedReference
     private Set<Comment> comments;
 
     // Getters and Setters

@@ -1,11 +1,13 @@
-package com.example.auth.dto.auth;
+package com.example.auth.model.dto.auth;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
+import lombok.Builder;
 import lombok.Data;
 
 @Data
+@Builder
 public class RegisterRequestDto {
 
     @NotBlank(message = "Email is required")

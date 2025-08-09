@@ -1,4 +1,4 @@
-package com.example.auth.dto.project;
+package com.example.auth.model.dto.project;
 
 import lombok.Data;
 
@@ -19,5 +19,4 @@ public class ProjectResponseDTO {
     private EmployeeSummaryDTO updatedBy;
 
     private List<EmployeeSummaryDTO> employees; // ✅ list of employees
-    private List<TaskSummaryDTO> tasks;         // ✅ list of tasks
 }

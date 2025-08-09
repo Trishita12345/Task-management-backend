@@ -7,6 +7,7 @@ import com.example.auth.constants.Constants;
 import org.springframework.context.MessageSourceResolvable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authorization.AuthorizationDeniedException;
 import org.springframework.validation.FieldError;
 import org.springframework.validation.method.ParameterValidationResult;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -19,6 +20,7 @@ import jakarta.validation.ConstraintViolationException;
 
 @RestControllerAdvice
 public class GlobalExceptionHandler {
+
     private String[] resolveFieldName(ParameterValidationResult result, MessageSourceResolvable error) {
         // ✅ For payload validation (field-level)
         if (error instanceof FieldError fe) {
@@ -79,9 +81,15 @@ public class GlobalExceptionHandler {
         return buildResponse(HttpStatus.BAD_REQUEST, Constants.INVALID_PARAMETER + ex.getName());
     }
 
+    @ExceptionHandler(AuthorizationDeniedException.class)
+    public ResponseEntity<ErrorResponse> handleUnauthorizedRequest(AuthorizationDeniedException ex) {
+        return buildResponse(HttpStatus.UNAUTHORIZED, Constants.ACCESS_DENIED);
+    }
+
+
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ErrorResponse> handleGeneric(Exception ex) {
-        return buildResponse(HttpStatus.INTERNAL_SERVER_ERROR, Constants.SOMETHING_WENT_WRONG);
+        return buildResponse(HttpStatus.INTERNAL_SERVER_ERROR, Constants.SOMETHING_WENT_WRONG + " : " + ex.getMessage());
     }
 
     private ResponseEntity<ErrorResponse> buildResponse(HttpStatus status, String message) {

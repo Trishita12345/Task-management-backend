@@ -1,11 +1,11 @@
 package com.example.auth.model;
 
 import com.example.auth.constants.Constants;
-import com.example.auth.model.Employee;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
-import java.time.LocalDateTime;
-import java.util.UUID;
+import lombok.Data;
 
+@Data
 @Entity
 @Table(name = Constants.COMMENTS)
 public class Comment extends AuditEntity{
@@ -19,14 +19,9 @@ public class Comment extends AuditEntity{
     private String content;
 
     // ✅ Belongs to Task
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "task_id", nullable = false)
+    @JsonBackReference
     private Task task;
 
-    // ✅ Written by Employee
-    @ManyToOne
-    @JoinColumn(name = "employee_id", nullable = false)
-    private Employee employee;
-
-    // Getters and Setters
 }

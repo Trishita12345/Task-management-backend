@@ -1,0 +1,14 @@
+package com.example.auth.service;
+
+import com.example.auth.model.dto.comment.CommentRequestDTO;
+import com.example.auth.model.dto.comment.CommentResponseDTO;
+import org.springframework.data.domain.Page;
+
+import java.util.UUID;
+
+public interface ICommentService {
+    CommentResponseDTO addComment(UUID taskId, CommentRequestDTO commentRequestDTO);
+    CommentResponseDTO editComment(UUID taskId, Long CommentId, CommentRequestDTO commentRequestDTO);
+    void deleteComment(UUID taskId, Long CommentId);
+    Page<CommentResponseDTO> getCommentsByTaskId(UUID taskId, Integer page);
+}

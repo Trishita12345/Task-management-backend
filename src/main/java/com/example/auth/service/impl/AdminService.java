@@ -1,0 +1,93 @@
+package com.example.auth.service.impl;
+
+import com.example.auth.model.Employee;
+import com.example.auth.model.Role;
+import com.example.auth.model.dto.project.EmployeeSummaryDTO;
+import com.example.auth.model.dto.role.RoleAddUpdateDTO;
+import com.example.auth.model.dto.common.SelectOptionDTO;
+import com.example.auth.model.dto.role.RoleAddUpdateResponseDTO;
+import com.example.auth.model.mapper.EmployeeDetailsMapper;
+import com.example.auth.model.mapper.RoleAddUpdateDtoMapper;
+import com.example.auth.repository.IEmployeeRepository;
+import com.example.auth.repository.IPermissionRepository;
+import com.example.auth.repository.IRoleRepository;
+import com.example.auth.repository.predicate.EmployeePredicate;
+import com.example.auth.service.IAdminService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import java.util.*;
+
+import static com.example.auth.model.mapper.EntityToSelectedOptionMapper.entityToSelectedOptionListMapper;
+
+@Service
+public class AdminService implements IAdminService {
+
+    @Autowired
+    private IRoleRepository roleRepository;
+    @Autowired
+    private IPermissionRepository permissionRepository;
+    @Autowired
+    private IEmployeeRepository employeeRepository;
+
+    @Override
+    public List<SelectOptionDTO<UUID>> getRoles() {
+        return entityToSelectedOptionListMapper(roleRepository.findAll());
+    }
+
+    @Override
+    public List<SelectOptionDTO<Long>> getPermissions() {
+        return entityToSelectedOptionListMapper(permissionRepository.findAll());
+    }
+
+    @Override
+    public RoleAddUpdateResponseDTO addRole(RoleAddUpdateDTO dto) {
+        Role role = new Role();
+        role.setName(dto.getName());
+        role.getPermissions().addAll(permissionRepository.findAllById(dto.getPermissions()));
+        Role newRole = roleRepository.save(role);
+        return RoleAddUpdateDtoMapper.toRoleAddUpdateResponseDto(newRole);
+    }
+
+    @Override
+    public RoleAddUpdateResponseDTO updateRole(UUID roleId, RoleAddUpdateDTO dto) {
+        Role role = roleRepository.findById(roleId)
+                .orElseThrow(() -> new NoSuchElementException("Role not found"));
+        role.setName(dto.getName());
+        role.setPermissions(new HashSet<>(permissionRepository.findAllById(dto.getPermissions())));
+        Role newRole = roleRepository.save(role);
+        return RoleAddUpdateDtoMapper.toRoleAddUpdateResponseDto(newRole);
+    }
+
+    @Override
+    public void deleteRole(UUID roleId) {
+        Role role = roleRepository.findById(roleId)
+                .orElseThrow(() -> new NoSuchElementException("Role not found"));
+        roleRepository.delete(role);
+    }
+
+    @Override
+    public List<EmployeeSummaryDTO> getEmployeesByRole(UUID roleId) {
+        List<Employee> employeeList = new ArrayList<>();
+        if(roleId != null) {
+            Role role = roleRepository.findById(roleId)
+                    .orElseThrow(() -> new NoSuchElementException("Role not found"));
+            employeeRepository.findAll(EmployeePredicate
+                    .findEmployeeByRoleId(roleId)).forEach(employeeList::add);
+        } else {
+            employeeList.addAll(employeeRepository.findAll());
+        }
+        return employeeList.stream().map(EmployeeDetailsMapper::toEmployeeSummary).toList();
+    }
+
+    @Override
+    public EmployeeSummaryDTO updateRoleByEmployeeId(UUID roleId, UUID employeeId) {
+        Role role = roleRepository.findById(roleId)
+                .orElseThrow(() -> new NoSuchElementException("Role not found"));
+        Employee employee = employeeRepository.findById(employeeId)
+                .orElseThrow(() -> new NoSuchElementException("Employee not found"));
+        employee.setRole(role);
+        Employee updatedEmployee = employeeRepository.save(employee);
+        return EmployeeDetailsMapper.toEmployeeSummary(updatedEmployee);
+    }
+}

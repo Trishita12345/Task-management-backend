@@ -1,4 +1,4 @@
-package com.example.auth.dto.auth;
+package com.example.auth.model.dto.auth;
 
 import com.example.auth.model.Employee;
 import jakarta.validation.constraints.NotBlank;

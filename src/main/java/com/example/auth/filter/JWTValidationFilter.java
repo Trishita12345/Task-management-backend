@@ -1,7 +1,7 @@
 package com.example.auth.filter;
 
 import com.example.auth.constants.Constants;
-import com.example.auth.dto.auth.JWTAuthenticationToken;
+import com.example.auth.model.dto.auth.JWTAuthenticationToken;
 import com.example.auth.util.PublicEndPoints;
 import com.example.auth.util.JWTUtil;
 import jakarta.servlet.FilterChain;

@@ -22,4 +22,6 @@ public class Constants {
     public static final String TASKS = "tasks";
     public static final String DEFAULT_EMPLOYEE_TYPE = "EMPLOYEE";
     public static final String USER_NOT_FOUND = "User not found";
+    public static final String ACCESS_DENIED = "You don't have access for this action. Please contact the admin for privileges.";
+    public static final String SUPER_ADMIN = "SUPER_ADMIN";
 }

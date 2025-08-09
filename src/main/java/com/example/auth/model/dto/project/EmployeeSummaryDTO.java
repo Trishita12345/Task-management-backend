@@ -1,4 +1,4 @@
-package com.example.auth.dto.project;
+package com.example.auth.model.dto.project;
 
 import lombok.Data;
 
@@ -10,4 +10,5 @@ public class EmployeeSummaryDTO {
     private String firstName;
     private String lastName;
     private String email;
+    private String profileImage;
 }

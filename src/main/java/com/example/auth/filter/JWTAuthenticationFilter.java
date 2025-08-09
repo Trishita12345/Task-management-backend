@@ -1,7 +1,7 @@
 package com.example.auth.filter;
 
 import com.example.auth.constants.Constants;
-import com.example.auth.dto.auth.LoginRequestDto;
+import com.example.auth.model.dto.auth.LoginRequestDto;
 import com.example.auth.util.JWTUtil;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.FilterChain;

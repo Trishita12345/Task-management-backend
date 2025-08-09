@@ -1,13 +1,11 @@
 package com.example.auth.model;
 
 import com.example.auth.constants.Constants;
-import com.example.auth.model.Employee;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.Data;
 
-import java.time.LocalDateTime;
 import java.util.Set;
-import java.util.UUID;
 
 @Entity
 @Table(name = Constants.PROJECTS)
@@ -26,7 +24,7 @@ public class Project extends AuditEntity{
     private String details;
 
     // ✅ Project Manager
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "manager_id")
     private Employee manager;
 
@@ -41,6 +39,7 @@ public class Project extends AuditEntity{
 
     // ✅ One Project -> Many Tasks
     @OneToMany(mappedBy = "project", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonManagedReference
     private Set<Task> tasks;
 
     // Getters and Setters
