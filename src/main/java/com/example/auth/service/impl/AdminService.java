@@ -15,6 +15,7 @@ import com.example.auth.repository.predicate.EmployeePredicate;
 import com.example.auth.service.IAdminService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.*;
 
@@ -40,6 +41,7 @@ public class AdminService implements IAdminService {
         return entityToSelectedOptionListMapper(permissionRepository.findAll());
     }
 
+    @Transactional
     @Override
     public RoleAddUpdateResponseDTO addRole(RoleAddUpdateDTO dto) {
         Role role = new Role();
@@ -49,6 +51,7 @@ public class AdminService implements IAdminService {
         return RoleAddUpdateDtoMapper.toRoleAddUpdateResponseDto(newRole);
     }
 
+    @Transactional
     @Override
     public RoleAddUpdateResponseDTO updateRole(UUID roleId, RoleAddUpdateDTO dto) {
         Role role = roleRepository.findById(roleId)
@@ -59,6 +62,7 @@ public class AdminService implements IAdminService {
         return RoleAddUpdateDtoMapper.toRoleAddUpdateResponseDto(newRole);
     }
 
+    @Transactional
     @Override
     public void deleteRole(UUID roleId) {
         Role role = roleRepository.findById(roleId)
@@ -80,6 +84,7 @@ public class AdminService implements IAdminService {
         return employeeList.stream().map(EmployeeDetailsMapper::toEmployeeSummary).toList();
     }
 
+    @Transactional
     @Override
     public EmployeeSummaryDTO updateRoleByEmployeeId(UUID roleId, UUID employeeId) {
         Role role = roleRepository.findById(roleId)

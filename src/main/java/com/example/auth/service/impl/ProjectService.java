@@ -63,6 +63,7 @@ public class ProjectService implements IProjectService {
         return ProjectResponseMapper.toResponse(response_project);
     }
 
+    @Transactional
     @Override
     public ProjectResponseDTO updateProject(Long projectId, ProjectAddRequestDTO dto) {
         Employee manager = employeeRepository.findById(dto.getManagerId())

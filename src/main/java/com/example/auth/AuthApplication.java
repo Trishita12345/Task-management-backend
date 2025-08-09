@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.security.core.userdetails.UserDetails;
 
 @SpringBootApplication
 public class AuthApplication implements CommandLineRunner {
@@ -26,12 +27,17 @@ public class AuthApplication implements CommandLineRunner {
 
 	@Override
 	public void run(String... args) throws Exception {
-		RegisterRequestDto requestDto = RegisterRequestDto.builder()
-				.email(username)
-				.password(password)
-				.firstname("ADMIN")
-				.lastname("USER")
-				.build();
-		employeeService.saveAdmin(requestDto);
+		try {
+			UserDetails userDetails = employeeService.loadUserByUsername(username);
+			if (userDetails != null) return;
+		} catch (Exception ex) {
+			RegisterRequestDto requestDto = RegisterRequestDto.builder()
+					.email(username)
+					.password(password)
+					.firstname("ADMIN")
+					.lastname("USER")
+					.build();
+			employeeService.saveAdmin(requestDto);
+		}
 	}
 }

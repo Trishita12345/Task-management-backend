@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.NoSuchElementException;
 
@@ -29,7 +30,7 @@ public class EmployeeService implements IEmployeeService {
     }
 
 
-
+    @Transactional
     @Override
     public Employee saveUser(RegisterRequestDto registerRequestDto) {
         return createEmployeeByRole(registerRequestDto, Constants.DEFAULT_EMPLOYEE_TYPE);
@@ -58,6 +59,7 @@ public class EmployeeService implements IEmployeeService {
                 .orElseThrow(() -> new NoSuchElementException(Constants.USER_NOT_FOUND));
     }
 
+    @Transactional
     @Override
     public Employee saveAdmin(RegisterRequestDto registerRequestDto) {
         return createEmployeeByRole(registerRequestDto, Constants.SUPER_ADMIN);

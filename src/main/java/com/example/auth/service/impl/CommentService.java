@@ -15,6 +15,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.NoSuchElementException;
 import java.util.Objects;
@@ -28,7 +29,7 @@ public class CommentService implements ICommentService {
     @Autowired
     private ITaskRepository taskRepository;
 
-
+    @Transactional
     @Override
     public CommentResponseDTO addComment(UUID taskId, CommentRequestDTO commentRequestDTO) {
         Task task = taskRepository.findById(taskId)
@@ -40,6 +41,7 @@ public class CommentService implements ICommentService {
         return CommentResponseMapper.toCommentDetails(newComment);
     }
 
+    @Transactional
     @Override
     public CommentResponseDTO editComment(UUID taskId, Long commentId, CommentRequestDTO commentRequestDTO) {
         Comment comment = commentExistInTask(taskId, commentId);
@@ -48,6 +50,7 @@ public class CommentService implements ICommentService {
         return CommentResponseMapper.toCommentDetails(newComment);
     }
 
+    @Transactional
     @Override
     public void deleteComment(UUID taskId, Long commentId) {
         Comment comment = commentExistInTask(taskId, commentId);

@@ -18,6 +18,7 @@ import com.querydsl.core.types.dsl.BooleanExpression;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.lang.reflect.Field;
 import java.util.*;
@@ -58,6 +59,7 @@ public class TaskService implements ITaskService {
         return TaskDetailResponseMapper.toTaskDetailResponse(task);
     }
 
+    @Transactional
     @Override
     public TaskResponseDTO addTask(Long projectId, TaskAddRequestDTO taskAddRequestDTO) {
         Project project = projectRepository.findById(projectId)
@@ -89,6 +91,7 @@ public class TaskService implements ITaskService {
         return newTask;
     }
 
+    @Transactional
     @Override
     public TaskDetailResponseDTO editTask(Long projectId, UUID taskId, TaskEditRequestDTO taskEditRequestDTO) {
         Task task = taskExistInProject(projectId, taskId);
@@ -138,6 +141,7 @@ public class TaskService implements ITaskService {
         return TaskDetailResponseMapper.toTaskDetailResponse(updatedTask);
     }
 
+    @Transactional
     @Override
     public void deleteTask(Long projectId, UUID taskId) {
         Task task = taskExistInProject(projectId, taskId);
