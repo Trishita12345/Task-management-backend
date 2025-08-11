@@ -3,19 +3,22 @@ package com.example.auth.model;
 import com.example.auth.constants.Constants;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.util.Set;
+import java.util.UUID;
 
 @Entity
 @Table(name = Constants.PROJECTS)
-@Data
+@Getter
+@Setter
 public class Project extends AuditEntity{
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.UUID)
     @Column(name = "project_id", nullable = false, updatable = false)
-    private Long projectId;
+    private UUID projectId;
 
     @Column(name = "name", nullable = false)
     private String name;

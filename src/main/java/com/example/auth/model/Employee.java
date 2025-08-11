@@ -3,7 +3,8 @@ package com.example.auth.model;
 import com.example.auth.constants.Constants;
 import com.example.auth.model.enums.SelectOption;
 import jakarta.persistence.*;
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -14,7 +15,8 @@ import java.util.Set;
 import java.util.UUID;
 
 @Entity
-@Data
+@Getter
+@Setter
 @Table(name = Constants.EMPLOYEES)
 //@ToString(exclude = {"assignedTasks", "managedTasks", "createdTasks", "updatedTasks", "createdProjects", "updatedProjects", "createdComments", "updatedComments"})
 public class Employee implements UserDetails, SelectOption<UUID> {

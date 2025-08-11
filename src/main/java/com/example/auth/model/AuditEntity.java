@@ -2,12 +2,14 @@ package com.example.auth.model;
 
 import com.example.auth.util.SecurityUtil;
 import jakarta.persistence.*;
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.time.LocalDateTime;
 
 @MappedSuperclass
-@Data
+@Getter
+@Setter
 public abstract class AuditEntity {
 
     @Column(name = "created_at", nullable = false, updatable = false)

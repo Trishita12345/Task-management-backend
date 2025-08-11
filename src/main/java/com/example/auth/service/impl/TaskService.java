@@ -34,7 +34,7 @@ public class TaskService implements ITaskService {
     private IEmployeeRepository employeeRepository;
 
     @Override
-    public List<TaskResponseDTO> getTasks(Long projectId, String query, TaskListRequestDTO taskListRequestDTO) {
+    public List<TaskResponseDTO> getTasks(UUID projectId, String query, TaskListRequestDTO taskListRequestDTO) {
         projectRepository.findById(projectId)
                 .orElseThrow(() -> new NoSuchElementException("Project not found"));
         List<Task> tasklist = new ArrayList<>();
@@ -54,14 +54,14 @@ public class TaskService implements ITaskService {
     }
 
     @Override
-    public TaskDetailResponseDTO getTaskById(Long projectId, UUID taskId) {
+    public TaskDetailResponseDTO getTaskById(UUID projectId, UUID taskId) {
         Task task = taskExistInProject(projectId, taskId);
         return TaskDetailResponseMapper.toTaskDetailResponse(task);
     }
 
     @Transactional
     @Override
-    public TaskResponseDTO addTask(Long projectId, TaskAddRequestDTO taskAddRequestDTO) {
+    public TaskResponseDTO addTask(UUID projectId, TaskAddRequestDTO taskAddRequestDTO) {
         Project project = projectRepository.findById(projectId)
                 .orElseThrow(() -> new NoSuchElementException("Project not found"));
 
@@ -93,7 +93,7 @@ public class TaskService implements ITaskService {
 
     @Transactional
     @Override
-    public TaskDetailResponseDTO editTask(Long projectId, UUID taskId, TaskEditRequestDTO taskEditRequestDTO) {
+    public TaskDetailResponseDTO editTask(UUID projectId, UUID taskId, TaskEditRequestDTO taskEditRequestDTO) {
         Task task = taskExistInProject(projectId, taskId);
         String fieldName = taskEditRequestDTO.getKey();
         Object value = taskEditRequestDTO.getValue();
@@ -143,12 +143,12 @@ public class TaskService implements ITaskService {
 
     @Transactional
     @Override
-    public void deleteTask(Long projectId, UUID taskId) {
+    public void deleteTask(UUID projectId, UUID taskId) {
         Task task = taskExistInProject(projectId, taskId);
         taskRepository.delete(task);
     }
 
-    private Task taskExistInProject(Long projectId, UUID taskId){
+    private Task taskExistInProject(UUID projectId, UUID taskId){
         Task task = taskRepository.findById(taskId)
                 .orElseThrow(() -> new NoSuchElementException("Task not found"));
         if(!Objects.equals(task.getProject().getProjectId(), projectId)){

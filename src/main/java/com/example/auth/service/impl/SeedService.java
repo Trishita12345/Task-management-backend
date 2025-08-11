@@ -8,12 +8,14 @@ import com.example.auth.repository.IPermissionRepository;
 import com.example.auth.repository.IRoleRepository;
 import com.example.auth.service.IEmployeeService;
 import com.example.auth.service.ISeedService;
-import io.jsonwebtoken.security.Password;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @Service
 public class SeedService implements ISeedService {
@@ -38,14 +40,24 @@ public class SeedService implements ISeedService {
 
     @Override
     public void setupInitialData() {
-        Constants.DEFAULT_PERMISSIONS.stream()
-                .filter(permissionName -> !permissionRepository.existsByName(permissionName))
-                .map(Permission::new)
-                .forEach(permissionRepository::save);
+        // Role creation
         Constants.DEFAULT_ROLES.stream()
                 .filter(role -> !roleRepository.existsByName(role))
-                .map(Role::new).forEach(roleRepository::save);
+                .map(Role::new)
+                .forEach(roleRepository::save);
+        // permission creation
+        Set<Permission> permissions = Constants.DEFAULT_PERMISSIONS.stream()
+                .filter(permissionName -> !permissionRepository.existsByName(permissionName))
+                .map(Permission::new)
+                .map(permissionRepository::save)
+                .collect(Collectors.toSet());
         try {
+            // update SUPER_ADMIN role
+            Role SUPER_ADMIN_ROLE = roleRepository.findByName(Constants.SUPER_ADMIN).orElseGet(() -> null);
+            if(SUPER_ADMIN_ROLE != null){
+                SUPER_ADMIN_ROLE.getPermissions().addAll(permissions);
+                roleRepository.save(SUPER_ADMIN_ROLE);
+            }
             UserDetails userDetails = employeeService.loadUserByUsername(username);
             if (userDetails != null) return;
         } catch (Exception ex) {

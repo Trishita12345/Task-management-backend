@@ -46,7 +46,7 @@ public class CommentController {
     @Operation(summary = "Edit Comments")
     public ResponseEntity<CommentResponseDTO> editComment(
             @Valid @PathVariable @NotNull UUID taskId,
-            @Valid @PathVariable @NotNull Long commentId,
+            @Valid @PathVariable @NotNull UUID commentId,
             @Valid @RequestBody CommentRequestDTO commentRequestDTO
     ){
         return ResponseEntity.ok(commentService.editComment(taskId, commentId, commentRequestDTO));
@@ -57,7 +57,7 @@ public class CommentController {
     @Operation(summary = "Delete Comments")
     public ResponseEntity<Void> deleteComment(
             @Valid @PathVariable @NotNull UUID taskId,
-            @Valid @PathVariable @NotNull Long commentId
+            @Valid @PathVariable @NotNull UUID commentId
     ){
         commentService.deleteComment(taskId, commentId);
         return ResponseEntity.noContent().build();

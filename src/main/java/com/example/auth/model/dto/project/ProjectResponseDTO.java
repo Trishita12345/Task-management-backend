@@ -1,13 +1,16 @@
 package com.example.auth.model.dto.project;
 
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.UUID;
 
-@Data
+@Getter
+@Setter
 public class ProjectResponseDTO {
-    private Long projectId;
+    private UUID projectId;
     private String name;
     private String details;
 
@@ -19,4 +22,6 @@ public class ProjectResponseDTO {
     private EmployeeSummaryDTO updatedBy;
 
     private List<EmployeeSummaryDTO> employees; // ✅ list of employees
-}
+
+    }
+

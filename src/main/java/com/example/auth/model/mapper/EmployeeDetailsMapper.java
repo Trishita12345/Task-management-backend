@@ -21,6 +21,7 @@ public class EmployeeDetailsMapper {
         if (employee == null) return null;
 
         return EmployeeDetailsResponseDTO.builder()
+                .empId(employee.getId())
                 .firstname(employee.getFirstname())
                 .lastname(employee.getLastname())
                 .email(employee.getEmail())

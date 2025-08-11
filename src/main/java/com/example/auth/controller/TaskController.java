@@ -26,7 +26,7 @@ public class TaskController {
     @PreAuthorize("hasAuthority('VIEW_TASKS')")
     @Operation(summary = "Get Tasks by ProjectId")
     public ResponseEntity<List<TaskResponseDTO>> getTasks(
-            @Valid @PathVariable @NotNull @Positive Long projectId,
+            @Valid @PathVariable @NotNull @Positive UUID projectId,
             @Valid @RequestParam(required = false, defaultValue = "") String query,
             @Valid @RequestBody TaskListRequestDTO taskListRequestDTO) {
         return ResponseEntity.ok(taskService.getTasks(projectId, query, taskListRequestDTO));
@@ -36,7 +36,7 @@ public class TaskController {
     @PreAuthorize("hasAuthority('VIEW_TASKS')")
     @Operation(summary = "Get Tasks by task id")
     public ResponseEntity<TaskDetailResponseDTO> getTaskById(
-            @Valid @PathVariable @NotNull @Positive Long projectId,
+            @Valid @PathVariable @NotNull @Positive UUID projectId,
             @Valid @PathVariable @NotNull UUID taskId) {
         return ResponseEntity.ok(taskService.getTaskById(projectId, taskId));
     }
@@ -45,7 +45,7 @@ public class TaskController {
     @PreAuthorize("hasAuthority('ADD_TASKS')")
     @Operation(summary = "Add Tasks by ProjectId")
     public ResponseEntity<TaskResponseDTO> addTasks(
-            @Valid @PathVariable @NotNull @Positive Long projectId,
+            @Valid @PathVariable @NotNull @Positive UUID projectId,
             @Valid @RequestBody TaskAddRequestDTO taskAddRequestDTO) {
         return ResponseEntity.ok(taskService.addTask(projectId, taskAddRequestDTO));
     }
@@ -54,7 +54,7 @@ public class TaskController {
     @PreAuthorize("hasAuthority('EDIT_TASKS')")
     @Operation(summary = "Edit Tasks by task id")
     public ResponseEntity<TaskDetailResponseDTO> editTasks(
-            @Valid @PathVariable @NotNull @Positive Long projectId,
+            @Valid @PathVariable @NotNull @Positive UUID projectId,
             @Valid @PathVariable @NotNull UUID taskId,
             @Valid @RequestBody TaskEditRequestDTO taskEditRequestDTO) {
         return ResponseEntity.ok(taskService.editTask(projectId, taskId, taskEditRequestDTO));
@@ -65,7 +65,7 @@ public class TaskController {
     @PreAuthorize("hasAuthority('DELETE_TASKS')")
     @Operation(summary = "Delete Tasks by task id")
     public ResponseEntity<Void> deleteTasks(
-            @PathVariable("projectId") @NotNull @Positive Long projectId,
+            @PathVariable("projectId") @NotNull @Positive UUID projectId,
             @PathVariable("taskId") @NotNull UUID taskId) {
         taskService.deleteTask(projectId, taskId);
         return ResponseEntity.noContent().build();

@@ -1,13 +1,17 @@
 package com.example.auth.model.dto.employee;
 
 import lombok.Builder;
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.util.List;
+import java.util.UUID;
 
 @Builder
-@Data
+@Getter
+@Setter
 public class EmployeeDetailsResponseDTO {
+    private UUID empId;
     private String firstname;
     private String lastname;
     private String email;

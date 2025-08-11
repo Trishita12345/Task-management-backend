@@ -43,7 +43,7 @@ public class CommentService implements ICommentService {
 
     @Transactional
     @Override
-    public CommentResponseDTO editComment(UUID taskId, Long commentId, CommentRequestDTO commentRequestDTO) {
+    public CommentResponseDTO editComment(UUID taskId, UUID commentId, CommentRequestDTO commentRequestDTO) {
         Comment comment = commentExistInTask(taskId, commentId);
         comment.setContent(commentRequestDTO.getContent());
         Comment newComment = commentRepository.save(comment);
@@ -52,7 +52,7 @@ public class CommentService implements ICommentService {
 
     @Transactional
     @Override
-    public void deleteComment(UUID taskId, Long commentId) {
+    public void deleteComment(UUID taskId, UUID commentId) {
         Comment comment = commentExistInTask(taskId, commentId);
         commentRepository.delete(comment);
     }
@@ -67,7 +67,7 @@ public class CommentService implements ICommentService {
         return commentPage.map(CommentResponseMapper::toCommentDetails);
     }
 
-    private Comment commentExistInTask(UUID taskId, Long commentId){
+    private Comment commentExistInTask(UUID taskId, UUID commentId){
         Comment comment = commentRepository.findById(commentId)
                 .orElseThrow(() -> new NoSuchElementException("Comment not found"));
         if(!Objects.equals(comment.getTask().getTaskId(), taskId)){

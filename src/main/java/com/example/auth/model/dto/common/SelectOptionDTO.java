@@ -1,8 +1,10 @@
 package com.example.auth.model.dto.common;
 
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
-@Data
+@Getter
+@Setter
 public class SelectOptionDTO<T> {
     private String label;
     private T value;

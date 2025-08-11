@@ -3,17 +3,21 @@ package com.example.auth.model;
 import com.example.auth.constants.Constants;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
-@Data
+import java.util.UUID;
+
+@Getter
+@Setter
 @Entity
 @Table(name = Constants.COMMENTS)
 public class Comment extends AuditEntity{
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.UUID)
     @Column(name = "comment_id", nullable = false, updatable = false)
-    private Long commentId;
+    private UUID commentId;
 
     @Column(name = "content", nullable = false, columnDefinition = "TEXT")
     private String content;

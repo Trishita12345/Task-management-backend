@@ -3,27 +3,25 @@ package com.example.auth.model;
 import com.example.auth.constants.Constants;
 import com.example.auth.model.enums.SelectOption;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 import lombok.NoArgsConstructor;
-import org.aspectj.apache.bcel.generic.TABLESWITCH;
 
-import java.util.HashSet;
-import java.util.Set;
+import java.util.UUID;
 
 @Entity(name = Constants.PERMISSIONS)
-@Data
+@Getter
+@Setter
 @NoArgsConstructor
-public class Permission implements SelectOption<Long> {
+public class Permission  implements SelectOption<UUID> {
 
     public Permission(String name){
         this.name = name;
     }
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    @GeneratedValue(strategy = GenerationType.UUID)
+    private UUID id;
 
     @Column(nullable = false, unique = true)
     private String name;
@@ -34,7 +32,7 @@ public class Permission implements SelectOption<Long> {
     }
 
     @Override
-    public Long getValue() {
+    public UUID getValue() {
         return id;
     }
 

@@ -1,8 +1,10 @@
 package com.example.auth.model.dto.task;
 
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
-@Data
+@Getter
+@Setter
 public class TaskEditRequestDTO {
     private String key;
     private Object value;

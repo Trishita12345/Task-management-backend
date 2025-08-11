@@ -8,7 +8,7 @@ import java.util.UUID;
 
 public interface ICommentService {
     CommentResponseDTO addComment(UUID taskId, CommentRequestDTO commentRequestDTO);
-    CommentResponseDTO editComment(UUID taskId, Long CommentId, CommentRequestDTO commentRequestDTO);
-    void deleteComment(UUID taskId, Long CommentId);
+    CommentResponseDTO editComment(UUID taskId, UUID commentId, CommentRequestDTO commentRequestDTO);
+    void deleteComment(UUID taskId, UUID commentId);
     Page<CommentResponseDTO> getCommentsByTaskId(UUID taskId, Integer page);
 }

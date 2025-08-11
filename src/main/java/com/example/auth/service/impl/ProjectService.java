@@ -20,6 +20,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.NoSuchElementException;
 import java.util.Set;
+import java.util.UUID;
 
 @Service
 public class ProjectService implements IProjectService {
@@ -65,7 +66,7 @@ public class ProjectService implements IProjectService {
 
     @Transactional
     @Override
-    public ProjectResponseDTO updateProject(Long projectId, ProjectAddRequestDTO dto) {
+    public ProjectResponseDTO updateProject(UUID projectId, ProjectAddRequestDTO dto) {
         Employee manager = employeeRepository.findById(dto.getManagerId())
                 .orElseThrow(() -> new NoSuchElementException("Manager not found"));
         Project project = projectRepository.findById(projectId).orElseThrow(() -> new NoSuchElementException(Constants.PROJECT_NOT_FOUND));
@@ -78,7 +79,7 @@ public class ProjectService implements IProjectService {
     }
 
     @Override
-    public ProjectResponseDTO getProjectById(Long projectId) {
+    public ProjectResponseDTO getProjectById(UUID projectId) {
         Project project = projectRepository.findById(projectId).orElseThrow(() -> new NoSuchElementException(Constants.PROJECT_NOT_FOUND));
         return ProjectResponseMapper.toResponse(project);
     }

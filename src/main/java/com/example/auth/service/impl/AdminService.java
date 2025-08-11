@@ -2,18 +2,22 @@ package com.example.auth.service.impl;
 
 import com.example.auth.model.Employee;
 import com.example.auth.model.Role;
+import com.example.auth.model.dto.common.SelectOptionDTO;
 import com.example.auth.model.dto.project.EmployeeSummaryDTO;
 import com.example.auth.model.dto.role.RoleAddUpdateDTO;
-import com.example.auth.model.dto.common.SelectOptionDTO;
 import com.example.auth.model.dto.role.RoleAddUpdateResponseDTO;
 import com.example.auth.model.mapper.EmployeeDetailsMapper;
+import com.example.auth.model.mapper.EntityToSelectedOptionMapper;
 import com.example.auth.model.mapper.RoleAddUpdateDtoMapper;
 import com.example.auth.repository.IEmployeeRepository;
 import com.example.auth.repository.IPermissionRepository;
 import com.example.auth.repository.IRoleRepository;
 import com.example.auth.repository.predicate.EmployeePredicate;
+import com.example.auth.repository.predicate.RolePredicate;
 import com.example.auth.service.IAdminService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -37,7 +41,33 @@ public class AdminService implements IAdminService {
     }
 
     @Override
-    public List<SelectOptionDTO<Long>> getPermissions() {
+    public Page<SelectOptionDTO<UUID>> getRolesPage(String query, Pageable pageable) {
+        Page<Role> roles;
+        if (query == null || query.trim().isEmpty()) {
+            // No search query → return all
+            roles = roleRepository.findAll(pageable);
+        } else {
+            // Search by name or details
+            roles = roleRepository.findAll(RolePredicate.findByQuery(query), pageable);
+        }
+        return roles.map(EntityToSelectedOptionMapper::entityToSelectedOptionMapper);
+    }
+
+    @Override
+    public Page<EmployeeSummaryDTO> getEmployeesPage(String query, Pageable pageable) {
+        Page<Employee> employees;
+        if (query == null || query.trim().isEmpty()) {
+            // No search query → return all
+            employees = employeeRepository.findAll(pageable);
+        } else {
+            // Search by name or details
+            employees = employeeRepository.findAll(EmployeePredicate.findByQuery(query), pageable);
+        }
+        return employees.map(EmployeeDetailsMapper::toEmployeeSummary);
+    }
+
+    @Override
+    public List<SelectOptionDTO<UUID>> getPermissions() {
         return entityToSelectedOptionListMapper(permissionRepository.findAll());
     }
 

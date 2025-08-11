@@ -13,7 +13,7 @@ public class TaskPredicate {
         return task.taskName.containsIgnoreCase(query).or(task.taskDescription.containsIgnoreCase(query));
     }
 
-    public static BooleanExpression findByProjectId(Long projectId){
+    public static BooleanExpression findByProjectId(UUID projectId){
         return task.project.projectId.eq(projectId);
     }
 

@@ -1,8 +1,10 @@
 package com.example.auth.model.dto.common;
 
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
-@Data
+@Getter
+@Setter
 public class PageRequestDTO {
     private int page = 0;
     private int size = 10;

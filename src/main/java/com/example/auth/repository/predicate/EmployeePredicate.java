@@ -10,4 +10,7 @@ public class EmployeePredicate {
     public static BooleanExpression findEmployeeByRoleId(UUID roleId){
         return employee.role.id.eq(roleId);
     }
+    public static BooleanExpression findByQuery(String query){
+        return employee.firstname.containsIgnoreCase(query).or(employee.lastname.containsIgnoreCase(query).or(employee.email.containsIgnoreCase((query))));
+    }
 }

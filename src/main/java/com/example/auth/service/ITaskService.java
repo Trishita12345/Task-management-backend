@@ -6,9 +6,9 @@ import java.util.List;
 import java.util.UUID;
 
 public interface ITaskService {
-    List<TaskResponseDTO> getTasks(Long projectId, String query, TaskListRequestDTO taskListRequestDTO);
-    TaskDetailResponseDTO getTaskById(Long projectId, UUID taskId);
-    TaskResponseDTO addTask(Long projectId, TaskAddRequestDTO taskAddRequestDTO);
-    TaskDetailResponseDTO editTask(Long projectId, UUID taskId, TaskEditRequestDTO taskEditRequestDTO);
-    void deleteTask(Long projectId, UUID taskId);
+    List<TaskResponseDTO> getTasks(UUID projectId, String query, TaskListRequestDTO taskListRequestDTO);
+    TaskDetailResponseDTO getTaskById(UUID projectId, UUID taskId);
+    TaskResponseDTO addTask(UUID projectId, TaskAddRequestDTO taskAddRequestDTO);
+    TaskDetailResponseDTO editTask(UUID projectId, UUID taskId, TaskEditRequestDTO taskEditRequestDTO);
+    void deleteTask(UUID projectId, UUID taskId);
 }

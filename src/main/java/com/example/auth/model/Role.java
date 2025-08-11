@@ -3,14 +3,16 @@ package com.example.auth.model;
 import com.example.auth.constants.Constants;
 import com.example.auth.model.enums.SelectOption;
 import jakarta.persistence.*;
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 import lombok.NoArgsConstructor;
 
 import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
 
-@Data
+@Getter
+@Setter
 @Entity
 @Table(name = Constants.ROLES)
 @NoArgsConstructor

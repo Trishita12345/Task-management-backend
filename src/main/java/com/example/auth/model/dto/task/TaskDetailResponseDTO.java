@@ -5,13 +5,15 @@ import com.example.auth.model.dto.project.EmployeeSummaryDTO;
 import com.example.auth.model.enums.Priority;
 import com.example.auth.model.enums.TaskStatus;
 import com.example.auth.model.enums.TaskType;
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
 
-@Data
+@Getter
+@Setter
 public class TaskDetailResponseDTO {
     private UUID taskId;
     private String taskName;

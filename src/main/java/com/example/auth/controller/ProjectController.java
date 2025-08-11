@@ -17,6 +17,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.UUID;
+
 @RestController
 @RequestMapping(path = "/authenticated/projects")
 public class ProjectController {
@@ -42,7 +44,7 @@ public class ProjectController {
     @PreAuthorize("hasAuthority('VIEW_PROJECTS')")
     @GetMapping(path="/{projectId}")
     @Operation(summary = "Get Projects by id")
-    public ResponseEntity<ProjectResponseDTO> getProjectById(@Valid @PathVariable @NotNull @Positive Long projectId) {
+    public ResponseEntity<ProjectResponseDTO> getProjectById(@Valid @PathVariable @NotNull @Positive UUID projectId) {
         return ResponseEntity.ok(projectService.getProjectById(projectId));
     }
 
@@ -57,7 +59,7 @@ public class ProjectController {
     @PreAuthorize("hasAuthority('EDIT_PROJECTS')")
     @PatchMapping("/{projectId}")
     @Operation(summary = "Edit Project by project id")
-    public ResponseEntity<ProjectResponseDTO> updateProject(@Valid @PathVariable @NotNull @Positive Long projectId, @Valid @RequestBody ProjectAddRequestDTO dto) {
+    public ResponseEntity<ProjectResponseDTO> updateProject(@Valid @PathVariable @NotNull @Positive UUID projectId, @Valid @RequestBody ProjectAddRequestDTO dto) {
         ProjectResponseDTO response = projectService.updateProject(projectId, dto);
         return ResponseEntity.ok(response);
     }
