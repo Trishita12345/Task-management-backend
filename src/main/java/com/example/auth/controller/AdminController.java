@@ -5,6 +5,7 @@ import com.example.auth.model.dto.common.SelectOptionDTO;
 import com.example.auth.model.dto.project.EmployeeSummaryDTO;
 import com.example.auth.model.dto.role.RoleAddUpdateDTO;
 import com.example.auth.model.dto.role.RoleAddUpdateResponseDTO;
+import com.example.auth.model.dto.role.RoleResponseDTO;
 import com.example.auth.service.IAdminService;
 import io.swagger.v3.oas.annotations.Operation;
 import jakarta.validation.Valid;
@@ -38,7 +39,7 @@ public class AdminController {
     @PreAuthorize("hasRole('SUPER_ADMIN') or hasAuthority('VIEW_ROLES')")
     @PostMapping(path="/get-roles/page")
     @Operation(summary = "Get all roles page")
-    public ResponseEntity<Page<SelectOptionDTO<UUID>>> getRolesPage(
+    public ResponseEntity<Page<RoleResponseDTO>> getRolesPage(
             @RequestParam(required = false, defaultValue = "") String query,
             @RequestBody PageRequestDTO pageRequestDTO
     ) {
@@ -112,11 +113,11 @@ public class AdminController {
         return ResponseEntity.ok(adminService.updateRoleByEmployeeId(roleId, employeeId));
     }
 
-    @DeleteMapping(path = "/delete-role/{roleId}")
-    @PreAuthorize("hasRole('SUPER_ADMIN') or hasAuthority('DELETE_ROLES')")
-    @Operation(summary = "Delete Role of application")
-    public ResponseEntity<RoleAddUpdateResponseDTO> deleteRole(
-            @Valid @PathVariable @NotNull UUID roleId){
-        return ResponseEntity.noContent().build();
-    }
+//    @DeleteMapping(path = "/delete-role/{roleId}")
+//    @PreAuthorize("hasRole('SUPER_ADMIN') or hasAuthority('DELETE_ROLES')")
+//    @Operation(summary = "Delete Role of application")
+//    public ResponseEntity<RoleAddUpdateResponseDTO> deleteRole(
+//            @Valid @PathVariable @NotNull UUID roleId){
+//        return ResponseEntity.noContent().build();
+//    }
 }

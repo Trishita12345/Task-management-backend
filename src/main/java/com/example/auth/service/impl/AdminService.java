@@ -6,8 +6,8 @@ import com.example.auth.model.dto.common.SelectOptionDTO;
 import com.example.auth.model.dto.project.EmployeeSummaryDTO;
 import com.example.auth.model.dto.role.RoleAddUpdateDTO;
 import com.example.auth.model.dto.role.RoleAddUpdateResponseDTO;
+import com.example.auth.model.dto.role.RoleResponseDTO;
 import com.example.auth.model.mapper.EmployeeDetailsMapper;
-import com.example.auth.model.mapper.EntityToSelectedOptionMapper;
 import com.example.auth.model.mapper.RoleAddUpdateDtoMapper;
 import com.example.auth.repository.IEmployeeRepository;
 import com.example.auth.repository.IPermissionRepository;
@@ -41,7 +41,7 @@ public class AdminService implements IAdminService {
     }
 
     @Override
-    public Page<SelectOptionDTO<UUID>> getRolesPage(String query, Pageable pageable) {
+    public Page<RoleResponseDTO> getRolesPage(String query, Pageable pageable) {
         Page<Role> roles;
         if (query == null || query.trim().isEmpty()) {
             // No search query → return all
@@ -50,7 +50,9 @@ public class AdminService implements IAdminService {
             // Search by name or details
             roles = roleRepository.findAll(RolePredicate.findByQuery(query), pageable);
         }
-        return roles.map(EntityToSelectedOptionMapper::entityToSelectedOptionMapper);
+        return roles.map(role -> RoleResponseDTO.builder()
+                .roleId(role.getId())
+                .name(role.getName()).build());
     }
 
     @Override

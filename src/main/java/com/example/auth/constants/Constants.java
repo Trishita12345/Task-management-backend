@@ -27,7 +27,6 @@ public class Constants {
     public static final String ACCESS_DENIED = "You don't have access for this action. Please contact the admin for privileges.";
     public static final String SUPER_ADMIN = "SUPER_ADMIN";
     public static final List<String> DEFAULT_PERMISSIONS = List.of(
-            "VIEW_TASKS", "ADD_TASKS", "EDIT_TASKS", "DELETE_TASKS", 
             "VIEW_ROLES","ADD_ROLES", "EDIT_ROLES", "DELETE_ROLES",
             "VIEW_TASKS","ADD_TASKS", "EDIT_TASKS", "DELETE_TASKS",
             "VIEW_PROJECTS", "ADD_PROJECTS", "EDIT_PROJECTS", "DELETE_PROJECTS",
