@@ -4,6 +4,7 @@ import com.example.auth.model.Permission;
 import com.example.auth.model.dto.employee.EmployeeDetailsResponseDTO;
 import com.example.auth.model.dto.project.EmployeeSummaryDTO;
 import com.example.auth.model.Employee;
+import com.example.auth.model.dto.role.RoleResponseDTO;
 
 public class EmployeeDetailsMapper {
     public static EmployeeSummaryDTO toEmployeeSummary(Employee employee) {
@@ -26,7 +27,9 @@ public class EmployeeDetailsMapper {
                 .lastname(employee.getLastname())
                 .email(employee.getEmail())
                 .profileImage(employee.getProfileImage())
-                .role(employee.getRole().getName())
+                .role(RoleResponseDTO.builder()
+                        .roleId(employee.getRole().getId())
+                        .name(employee.getRole().getName()).build())
                 .permissions(employee.getRole().getPermissions().stream().map(Permission::getName).toList())
                 .build();
     }

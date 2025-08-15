@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.util.List;
+import java.util.UUID;
 
 @Getter
 @Setter
@@ -13,5 +14,5 @@ public class RoleAddUpdateDTO {
     @NotBlank
     private String name;
     @NotNull
-    private List<Long> permissions;
+    private List<UUID> permissions;
 }

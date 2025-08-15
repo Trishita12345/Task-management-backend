@@ -95,7 +95,7 @@ public class AdminController {
         return ResponseEntity.ok(adminService.addRole(roleAddUpdateDTO));
     }
     @GetMapping(path = "/get-role/{roleId}")
-    @PreAuthorize("hasRole('SUPER_ADMIN') or hasAuthority('ADD_ROLES')")
+    @PreAuthorize("hasRole('SUPER_ADMIN') or hasAuthority('VIEW_ROLES')")
     @Operation(summary = "Get Role Details in application")
     public ResponseEntity<RoleAddUpdateResponseDTO> getRoleById(
             @Valid @PathVariable UUID roleId){
