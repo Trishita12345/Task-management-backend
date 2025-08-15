@@ -31,7 +31,7 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(HandlerMethodValidationException.class)
-    public ResponseEntity<ErrorResponse> handleValidation(HandlerMethodValidationException ex) {
+    public ResponseEntity<ApiResponse> handleValidation(HandlerMethodValidationException ex) {
         Map<String, String> errors = new HashMap<>();
         ex.getParameterValidationResults()
                 .forEach(result -> result.getResolvableErrors()
@@ -47,7 +47,7 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
-    public ResponseEntity<ErrorResponse> handleValidationException(MethodArgumentNotValidException ex) {
+    public ResponseEntity<ApiResponse> handleValidationException(MethodArgumentNotValidException ex) {
 
         Map<String, String> errors = new HashMap<>();
         ex.getBindingResult()
@@ -61,37 +61,37 @@ public class GlobalExceptionHandler {
 
 
     @ExceptionHandler(NoSuchElementException.class)
-    public ResponseEntity<ErrorResponse> handleNotFound(NoSuchElementException ex) {
+    public ResponseEntity<ApiResponse> handleNotFound(NoSuchElementException ex) {
         return buildResponse(HttpStatus.NOT_FOUND, ex.getMessage());
     }
 
     @ExceptionHandler(ConstraintViolationException.class)
-    public ResponseEntity<ErrorResponse> handleValidation(ConstraintViolationException ex) {
+    public ResponseEntity<ApiResponse> handleValidation(ConstraintViolationException ex) {
         return buildResponse(HttpStatus.BAD_REQUEST, ex.getMessage());
     }
 
     @ExceptionHandler(MethodArgumentTypeMismatchException.class)
-    public ResponseEntity<ErrorResponse> handleBadRequest(MethodArgumentTypeMismatchException ex) {
+    public ResponseEntity<ApiResponse> handleBadRequest(MethodArgumentTypeMismatchException ex) {
         return buildResponse(HttpStatus.BAD_REQUEST, Constants.INVALID_PARAMETER + ex.getName());
     }
 
     @ExceptionHandler(AuthorizationDeniedException.class)
-    public ResponseEntity<ErrorResponse> handleUnauthorizedRequest(AuthorizationDeniedException ex) {
+    public ResponseEntity<ApiResponse> handleUnauthorizedRequest(AuthorizationDeniedException ex) {
         return buildResponse(HttpStatus.UNAUTHORIZED, Constants.ACCESS_DENIED);
     }
 
 
     @ExceptionHandler(Exception.class)
-    public ResponseEntity<ErrorResponse> handleGeneric(Exception ex) {
+    public ResponseEntity<ApiResponse> handleGeneric(Exception ex) {
         return buildResponse(HttpStatus.INTERNAL_SERVER_ERROR, Constants.SOMETHING_WENT_WRONG + " : " + ex.getMessage());
     }
 
-    private ResponseEntity<ErrorResponse> buildResponse(HttpStatus status, String message) {
+    private ResponseEntity<ApiResponse> buildResponse(HttpStatus status, String message) {
         Map<String, String> errors = new HashMap<>();
         return buildResponse(status, message, errors);
     }
 
-    private ResponseEntity<ErrorResponse> buildResponse(HttpStatus status, String message, Map<String, String> errors) {
-        return new ResponseEntity<ErrorResponse>(new ErrorResponse(message, LocalDateTime.now(), errors), status);
+    private ResponseEntity<ApiResponse> buildResponse(HttpStatus status, String message, Map<String, String> errors) {
+        return new ResponseEntity<ApiResponse>(new ApiResponse(message, LocalDateTime.now(), errors), status);
     }
 }

@@ -26,6 +26,6 @@ public class RegisterRequestDto {
 
     private String profileImage;
 
-    @Pattern(regexp = "^.{8,}$\n",message="Password should be atleast 8 characters")
+    @Pattern(regexp = "^.{8,}$",message="Password should be at least 8 characters")
     private String password;
 }

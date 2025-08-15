@@ -1,5 +1,6 @@
 package com.example.auth.controller;
 
+import com.example.auth.exception.ApiResponse;
 import com.example.auth.model.Employee;
 import com.example.auth.model.dto.auth.RegisterRequestDto;
 import com.example.auth.model.dto.employee.EmployeeDetailsResponseDTO;
@@ -14,6 +15,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
+
+import java.time.LocalDateTime;
+import java.util.Map;
 
 
 @Slf4j
@@ -30,11 +34,11 @@ public class EmployeeAuthController {
     @PostMapping("/user-register")
     @SecurityRequirements()
     @Operation(summary = "Register new User")
-    public ResponseEntity<String> registerUser(@Valid @RequestBody RegisterRequestDto registerRequestDto) {
+    public ResponseEntity<ApiResponse> registerUser(@Valid @RequestBody RegisterRequestDto registerRequestDto) {
         log.info("Registering user: {}", registerRequestDto);
         registerRequestDto.setPassword(passwordEncoder.encode(registerRequestDto.getPassword()));
         employeeService.saveUser(registerRequestDto);
-        return ResponseEntity.ok("User registered successfully.");
+        return ResponseEntity.ok(new ApiResponse("User Registration Successful", LocalDateTime.now(), Map.of()));
     }
 
     @GetMapping("/my-profile")

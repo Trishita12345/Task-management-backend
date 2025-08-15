@@ -1,7 +1,6 @@
 package com.example.auth.exception;
 
 import java.time.LocalDateTime;
-import java.util.List;
 import java.util.Map;
 
 import lombok.AllArgsConstructor;
@@ -11,7 +10,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @AllArgsConstructor
-public class ErrorResponse {
+public class ApiResponse {
     private String message;
     private LocalDateTime timestamp;
     private Map<String, String> errors;
