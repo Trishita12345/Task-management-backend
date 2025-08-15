@@ -10,7 +10,7 @@ public class PublicEndPoints {
     private static final List<String> PUBLIC_PATTERNS = List.of(
             "/auth/user-register",
             "/h2-console/**",
-            "/error/",
+            "/error",
             "/refresh-token",
             "/swagger-ui/**",
             "/v3/api-docs/**",

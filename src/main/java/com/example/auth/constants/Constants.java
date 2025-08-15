@@ -30,7 +30,7 @@ public class Constants {
             "VIEW_ROLES","ADD_ROLES", "EDIT_ROLES", "DELETE_ROLES",
             "VIEW_TASKS","ADD_TASKS", "EDIT_TASKS", "DELETE_TASKS",
             "VIEW_PROJECTS", "ADD_PROJECTS", "EDIT_PROJECTS", "DELETE_PROJECTS",
-            "VIEW_EMPLOYEES", "ASSIGN_ROLE"
+            "VIEW_EMPLOYEES", "ASSIGN_ROLE_EMPLOYEES"
     );
     public static final List<String> DEFAULT_ROLES = List.of(
             SUPER_ADMIN, DEFAULT_EMPLOYEE_TYPE

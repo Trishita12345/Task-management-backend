@@ -15,7 +15,7 @@ public class RoleAddUpdateDtoMapper {
         // ✅ Map permissions
         if (role.getPermissions() != null) {
             dto.setPermissions(role.getPermissions().stream()
-                    .map(EntityToSelectedOptionMapper::entityToSelectedOptionMapper)
+                    .map(permission-> permission.getValue())
                     .toList());
         } else {
             dto.setPermissions(new ArrayList<>());

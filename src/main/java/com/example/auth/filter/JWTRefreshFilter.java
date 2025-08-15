@@ -3,6 +3,7 @@ package com.example.auth.filter;
 import com.example.auth.constants.Constants;
 import com.example.auth.model.dto.auth.JWTAuthenticationToken;
 import com.example.auth.util.JWTUtil;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.Cookie;
@@ -16,6 +17,8 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
+import java.time.LocalDateTime;
+import java.util.Map;
 
 @Slf4j
 @Component
@@ -32,7 +35,8 @@ public class JWTRefreshFilter extends OncePerRequestFilter {
             return;
         }
 
-        String refreshToken = JWTUtil.extractJWTTokenFromRequestCookie(request, "refreshToken");
+        String refreshToken = JWTUtil.extractJWTTokenFromRequestCookie(request, Constants.REFRESH);
+        System.out.println("refreshToken: "+ refreshToken);
         if (refreshToken == null) {
             response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
             return;
@@ -49,7 +53,6 @@ public class JWTRefreshFilter extends OncePerRequestFilter {
             accessCookie.setPath("/"); // Cookie available for all endpoints
             accessCookie.setMaxAge(Constants.ACCESS_TOKEN_EXPIRATION_TIME); // 1 days expiry
             response.addCookie(accessCookie);
-            response.getWriter().write("Logged in successfully");
             //Refresh token
             String refreshTokenNew = JWTUtil.generateToken(authResult,Constants.REFRESH);
             Cookie refreshCookie = new Cookie(Constants.REFRESH, refreshTokenNew);
@@ -58,6 +61,16 @@ public class JWTRefreshFilter extends OncePerRequestFilter {
             refreshCookie.setPath("/refresh-token"); // Cookie available only for refresh endpoint
             refreshCookie.setMaxAge(Constants.REFRESH_TOKEN_EXPIRATION_TIME); // 7 days expiry
             response.addCookie(refreshCookie);
+            response.setContentType("application/json");
+
+            ObjectMapper objectMapper = new ObjectMapper();
+            objectMapper.writeValue(response.getWriter(),
+                    Map.of(
+                            "timestamp", LocalDateTime.now().toString(),
+                            Constants.MESSAGE, "Logged in Successfully",
+                            Constants.ACCESS, token
+                    )
+            );
         } else {
             response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
             response.getWriter().write("Invalid credentials");

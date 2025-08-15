@@ -14,6 +14,7 @@ import lombok.Setter;
 public class ErrorResponse {
     private String message;
     private LocalDateTime timestamp;
-    private List<Map<String, String>> errors;
+    private Map<String, String> errors;
+
 }
 

@@ -14,5 +14,5 @@ import java.util.UUID;
 public class RoleAddUpdateResponseDTO {
     private UUID roleId;
     private String name;
-    private List<SelectOptionDTO<UUID>> permissions;
+    private List<UUID> permissions;
 }

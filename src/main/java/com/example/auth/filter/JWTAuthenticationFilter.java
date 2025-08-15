@@ -9,14 +9,23 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.validation.ConstraintViolation;
+import jakarta.validation.Validation;
+import jakarta.validation.Validator;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 import java.io.IOException;
+import java.time.LocalDateTime;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 @Slf4j
 @Component
@@ -36,16 +45,35 @@ public class JWTAuthenticationFilter extends OncePerRequestFilter {
         ObjectMapper objectMapper = new ObjectMapper();
         LoginRequestDto loginRequestDto = objectMapper.readValue(request.getInputStream(), LoginRequestDto.class);
 
-        if(loginRequestDto == null){
+        Validator validator = Validation.buildDefaultValidatorFactory().getValidator();
+
+        // Validate
+        Set<ConstraintViolation<LoginRequestDto>> violations = validator.validate(loginRequestDto);
+
+        final Map<String, String> errors = new HashMap<>();
+        // Handle violations
+        if (!violations.isEmpty()) {
+            violations.forEach(
+                    v -> errors.put(
+                        v.getPropertyPath().toString(), v.getMessage()
+                ));
+        }
+        if(!errors.isEmpty()){
+            // Return 400 with error details
             response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-            response.getWriter().write("Invalid request");
-            return;
+            response.setContentType("application/json");
+            objectMapper.writeValue(response.getWriter(),
+                    Map.of(
+                            "timestamp", LocalDateTime.now().toString(),
+                            Constants.MESSAGE, "Validation Failed",
+                            "errors", errors
+                    )
+            );
         } else {
             UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken =
                     new UsernamePasswordAuthenticationToken(loginRequestDto.getEmail(), loginRequestDto.getPassword());
-
-            Authentication authResult = authenticationManager.authenticate(usernamePasswordAuthenticationToken);
-            if(authResult.isAuthenticated()){
+            try {
+                Authentication authResult = authenticationManager.authenticate(usernamePasswordAuthenticationToken);
                 String token = JWTUtil.generateToken(authResult, Constants.ACCESS);
                 //response.setHeader("Authorization", "Bearer " +token);
                 Cookie accessCookie = new Cookie(Constants.ACCESS, token);
@@ -54,7 +82,6 @@ public class JWTAuthenticationFilter extends OncePerRequestFilter {
                 accessCookie.setPath("/"); // Cookie available for all endpoints
                 accessCookie.setMaxAge(Constants.ACCESS_TOKEN_EXPIRATION_TIME); // 1 days expiry
                 response.addCookie(accessCookie);
-                response.getWriter().write("Logged in successfully");
                 //Refresh token
                 String refreshToken = JWTUtil.generateToken(authResult, Constants.REFRESH);
                 Cookie refreshCookie = new Cookie(Constants.REFRESH, refreshToken);
@@ -63,10 +90,26 @@ public class JWTAuthenticationFilter extends OncePerRequestFilter {
                 refreshCookie.setPath("/refresh-token"); // Cookie available only for refresh endpoint
                 refreshCookie.setMaxAge(Constants.REFRESH_TOKEN_EXPIRATION_TIME); // 7 days expiry
                 response.addCookie(refreshCookie);
-            } else {
+                response.setContentType("application/json");
+                objectMapper.writeValue(response.getWriter(),
+                        Map.of(
+                                "timestamp", LocalDateTime.now().toString(),
+                                Constants.MESSAGE, "Logged in Successfully",
+                                Constants.ACCESS, token
+                        )
+                );
+
+            } catch (Exception ex) {
                 response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-                response.getWriter().write("Invalid credentials");
+                response.setContentType("application/json");
+                objectMapper.writeValue(response.getWriter(),
+                        Map.of(
+                                "timestamp", LocalDateTime.now().toString(),
+                                Constants.MESSAGE, "Email or Password is invalid"
+                        )
+                );
             }
+
         }
     }
 

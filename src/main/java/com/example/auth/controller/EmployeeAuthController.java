@@ -8,6 +8,7 @@ import com.example.auth.service.IEmployeeService;
 import com.example.auth.util.SecurityUtil;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirements;
+import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -29,7 +30,7 @@ public class EmployeeAuthController {
     @PostMapping("/user-register")
     @SecurityRequirements()
     @Operation(summary = "Register new User")
-    public ResponseEntity<String> registerUser(@RequestBody RegisterRequestDto registerRequestDto) {
+    public ResponseEntity<String> registerUser(@Valid @RequestBody RegisterRequestDto registerRequestDto) {
         log.info("Registering user: {}", registerRequestDto);
         registerRequestDto.setPassword(passwordEncoder.encode(registerRequestDto.getPassword()));
         employeeService.saveUser(registerRequestDto);

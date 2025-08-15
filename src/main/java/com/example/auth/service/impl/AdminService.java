@@ -76,7 +76,9 @@ public class AdminService implements IAdminService {
     @Transactional
     @Override
     public RoleAddUpdateResponseDTO addRole(RoleAddUpdateDTO dto) {
-        Role role = new Role();
+        Role role = roleRepository.findByName(dto.getName())
+                .orElseThrow(() -> new RuntimeException("Role already exist."));
+        role = new Role();
         role.setName(dto.getName());
         role.getPermissions().addAll(permissionRepository.findAllById(dto.getPermissions()));
         Role newRole = roleRepository.save(role);
@@ -126,5 +128,12 @@ public class AdminService implements IAdminService {
         employee.setRole(role);
         Employee updatedEmployee = employeeRepository.save(employee);
         return EmployeeDetailsMapper.toEmployeeSummary(updatedEmployee);
+    }
+
+    @Override
+    public RoleAddUpdateResponseDTO getRoleById(UUID roleId) {
+        Role role = roleRepository.findById(roleId)
+                .orElseThrow(() -> new NoSuchElementException("Role not found"));
+        return RoleAddUpdateDtoMapper.toRoleAddUpdateResponseDto(role);
     }
 }

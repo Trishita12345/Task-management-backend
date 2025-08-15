@@ -21,48 +21,42 @@ import jakarta.validation.ConstraintViolationException;
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
-    private String[] resolveFieldName(ParameterValidationResult result, MessageSourceResolvable error) {
+    private String resolveFieldName(ParameterValidationResult result, MessageSourceResolvable error) {
         // ✅ For payload validation (field-level)
         if (error instanceof FieldError fe) {
-            return new String[]{"payload", fe.getField()};
+            return fe.getField();
         }
         // ✅ For parameter validation
-        return new String[]{"parameter", result.getMethodParameter().getParameterName()};
+        return result.getMethodParameter().getParameterName();
     }
 
     @ExceptionHandler(HandlerMethodValidationException.class)
     public ResponseEntity<ErrorResponse> handleValidation(HandlerMethodValidationException ex) {
-        List<Map<String, String>> errors = ex.getParameterValidationResults().stream()
-                .flatMap(result -> result.getResolvableErrors().stream()
-                        .map(error -> {
-                            String[] field = resolveFieldName(result, error);
-                            return Map.of(
-                                    Constants.TYPE, field[0],
-                                    Constants.FIELD, field[1] ,
-                                    Constants.MESSAGE, error.getDefaultMessage()
+        Map<String, String> errors = new HashMap<>();
+        ex.getParameterValidationResults()
+                .forEach(result -> result.getResolvableErrors()
+                        .forEach(error -> {
+                            String field = resolveFieldName(result, error);
+                            errors.put(
+                                    field, error.getDefaultMessage()
                                 );
                             }
                         )
-                ).toList();
+                );
         return buildResponse(HttpStatus.BAD_REQUEST, Constants.VALIDATION_FAILED, errors);
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<ErrorResponse> handleValidationException(MethodArgumentNotValidException ex) {
 
-        List<Map<String, String>> errorList = ex.getBindingResult()
+        Map<String, String> errors = new HashMap<>();
+        ex.getBindingResult()
                 .getFieldErrors()
-                .stream()
-                .map(error -> {
-                    Map<String, String> map = new HashMap<>();
-                    map.put(Constants.TYPE, "payload");
-                map.put( Constants.FIELD, error.getField());
-                map.put(Constants.MESSAGE, error.getDefaultMessage());
-                    return map;
-                })
-                .toList();
+                .forEach(error -> {
+                    errors.put(error.getField(), error.getDefaultMessage());
+                });
 
-        return buildResponse(HttpStatus.BAD_REQUEST, "Validation failed", errorList);
+        return buildResponse(HttpStatus.BAD_REQUEST, "Validation failed", errors);
     }
 
 
@@ -93,11 +87,11 @@ public class GlobalExceptionHandler {
     }
 
     private ResponseEntity<ErrorResponse> buildResponse(HttpStatus status, String message) {
-        List<Map<String, String>> errors = new ArrayList<>();
+        Map<String, String> errors = new HashMap<>();
         return buildResponse(status, message, errors);
     }
 
-    private ResponseEntity<ErrorResponse> buildResponse(HttpStatus status, String message, List<Map<String, String>> errors) {
+    private ResponseEntity<ErrorResponse> buildResponse(HttpStatus status, String message, Map<String, String> errors) {
         return new ResponseEntity<ErrorResponse>(new ErrorResponse(message, LocalDateTime.now(), errors), status);
     }
 }

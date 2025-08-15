@@ -94,6 +94,13 @@ public class AdminController {
             @Valid @RequestBody RoleAddUpdateDTO roleAddUpdateDTO){
         return ResponseEntity.ok(adminService.addRole(roleAddUpdateDTO));
     }
+    @GetMapping(path = "/get-role/{roleId}")
+    @PreAuthorize("hasRole('SUPER_ADMIN') or hasAuthority('ADD_ROLES')")
+    @Operation(summary = "Get Role Details in application")
+    public ResponseEntity<RoleAddUpdateResponseDTO> getRoleById(
+            @Valid @PathVariable UUID roleId){
+        return ResponseEntity.ok(adminService.getRoleById(roleId));
+    }
 
     @PutMapping(path = "/update-role/{roleId}")
     @PreAuthorize("hasRole('SUPER_ADMIN') or hasAuthority('EDIT_ROLES')")
@@ -105,7 +112,7 @@ public class AdminController {
     }
 
     @PatchMapping(path = "/update-role/{employeeId}/{roleId}")
-    @PreAuthorize("hasRole('SUPER_ADMIN') or hasAuthority('ASSIGN_ROLE')")
+    @PreAuthorize("hasRole('SUPER_ADMIN') or hasAuthority('ASSIGN_ROLE_EMPLOYEES')")
     @Operation(summary = "Assign or Update Role of Employee")
     public ResponseEntity<EmployeeSummaryDTO> updateRoleByEmployeeId(
             @Valid @PathVariable @NotNull UUID roleId,
