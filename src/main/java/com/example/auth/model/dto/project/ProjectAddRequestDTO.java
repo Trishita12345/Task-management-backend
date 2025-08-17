@@ -1,6 +1,5 @@
 package com.example.auth.model.dto.project;
 
-import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
@@ -19,7 +18,7 @@ public class ProjectAddRequestDTO {
         private String name;
 
         @NotBlank
-        @Size(max = 100, message = "Details must be at most 100 characters")
+        @Size(max = 500, message = "Details must be at most 500 characters")
         private String details;
 
         @NotNull

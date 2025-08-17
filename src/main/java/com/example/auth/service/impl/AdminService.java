@@ -107,7 +107,7 @@ public class AdminService implements IAdminService {
     }
 
     @Override
-    public List<EmployeeSummaryDTO> getEmployeesByRole(UUID roleId) {
+    public List<SelectOptionDTO<UUID>> getEmployeesByRole(UUID roleId) {
         List<Employee> employeeList = new ArrayList<>();
         if(roleId != null) {
             Role role = roleRepository.findById(roleId)
@@ -117,7 +117,8 @@ public class AdminService implements IAdminService {
         } else {
             employeeList.addAll(employeeRepository.findAll());
         }
-        return employeeList.stream().map(EmployeeDetailsMapper::toEmployeeSummary).toList();
+//        return employeeList.stream().map(EmployeeDetailsMapper::toEmployeeSummary).toList();
+        return entityToSelectedOptionListMapper(employeeList);
     }
 
     @Transactional

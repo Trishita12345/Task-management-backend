@@ -20,7 +20,7 @@ public interface IAdminService {
     RoleAddUpdateResponseDTO addRole(RoleAddUpdateDTO dto);
     RoleAddUpdateResponseDTO updateRole(UUID roleId, RoleAddUpdateDTO dto);
     void deleteRole(UUID roleId);
-    List<EmployeeSummaryDTO> getEmployeesByRole(UUID roleId);
+    List<SelectOptionDTO<UUID>> getEmployeesByRole(UUID roleId);
     EmployeeSummaryDTO updateRoleByEmployeeId(UUID roleId, UUID employeeId);
     RoleAddUpdateResponseDTO getRoleById(@Valid UUID roleId);
 }

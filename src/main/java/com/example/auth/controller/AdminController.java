@@ -57,7 +57,7 @@ public class AdminController {
     @GetMapping(path = "/get-employees")
     @PreAuthorize("hasRole('SUPER_ADMIN') or hasAuthority('VIEW_EMPLOYEES')")
     @Operation(summary = "Get Employees by RoleId of application")
-    public ResponseEntity<List<EmployeeSummaryDTO>> getEmployeesByRole(
+    public ResponseEntity<List<SelectOptionDTO<UUID>>> getEmployeesByRole(
             @RequestParam(required = false) UUID roleId){
         return ResponseEntity.ok(adminService.getEmployeesByRole(roleId));
     }
