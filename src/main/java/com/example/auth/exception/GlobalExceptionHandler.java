@@ -1,9 +1,7 @@
 package com.example.auth.exception;
 
-import java.time.LocalDateTime;
-import java.util.*;
-
 import com.example.auth.constants.Constants;
+import jakarta.validation.ConstraintViolationException;
 import org.springframework.context.MessageSourceResolvable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -16,7 +14,10 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.method.annotation.HandlerMethodValidationException;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 
-import jakarta.validation.ConstraintViolationException;
+import java.time.LocalDateTime;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.NoSuchElementException;
 
 @RestControllerAdvice
 public class GlobalExceptionHandler {
@@ -77,7 +78,7 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(AuthorizationDeniedException.class)
     public ResponseEntity<ApiResponse> handleUnauthorizedRequest(AuthorizationDeniedException ex) {
-        return buildResponse(HttpStatus.UNAUTHORIZED, Constants.ACCESS_DENIED);
+        return buildResponse(HttpStatus.FORBIDDEN, Constants.ACCESS_DENIED);
     }
 
 

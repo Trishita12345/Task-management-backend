@@ -9,12 +9,15 @@ import com.example.auth.model.dto.role.RoleResponseDTO;
 public class EmployeeDetailsMapper {
     public static EmployeeSummaryDTO toEmployeeSummary(Employee employee) {
         if (employee == null) return null;
-
+        RoleResponseDTO roleResponseDTO = (RoleResponseDTO.builder()
+                .roleId(employee.getRole().getId())
+                .name(employee.getRole().getName()).build());
         EmployeeSummaryDTO dto = new EmployeeSummaryDTO();
         dto.setEmployeeId(employee.getId());
         dto.setFirstName(employee.getFirstname());
         dto.setLastName(employee.getLastname());
         dto.setEmail(employee.getEmail());
+        dto.setRole(roleResponseDTO);
         dto.setProfileImage(employee.getProfileImage());
         return dto;
     }

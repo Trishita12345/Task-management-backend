@@ -1,5 +1,6 @@
 package com.example.auth.model.dto.project;
 
+import com.example.auth.model.dto.role.RoleResponseDTO;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -13,4 +14,5 @@ public class EmployeeSummaryDTO {
     private String lastName;
     private String email;
     private String profileImage;
+    private RoleResponseDTO role;
 }

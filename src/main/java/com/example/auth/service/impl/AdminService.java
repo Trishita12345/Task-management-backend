@@ -76,9 +76,11 @@ public class AdminService implements IAdminService {
     @Transactional
     @Override
     public RoleAddUpdateResponseDTO addRole(RoleAddUpdateDTO dto) {
-        Role role = roleRepository.findByName(dto.getName())
-                .orElseThrow(() -> new RuntimeException("Role already exist."));
-        role = new Role();
+        roleRepository.findByName(dto.getName())
+                .ifPresent(r -> {
+                    throw new RuntimeException("Role already exists.");
+                });
+        Role role = new Role();
         role.setName(dto.getName());
         role.getPermissions().addAll(permissionRepository.findAllById(dto.getPermissions()));
         Role newRole = roleRepository.save(role);
