@@ -18,6 +18,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Set;
 import java.util.UUID;
@@ -58,7 +59,13 @@ public class ProjectService implements IProjectService {
         project.setName(dto.getName());
         project.setDetails(dto.getDetails());
         project.setManager(manager);
-        project.setEmployees(Set.of(currentUser));
+        // Add Project Owner and Manager by Default
+        project.setEmployees(Set.of(currentUser, manager));
+        // Add employees assigned
+        List<Employee> employees = employeeRepository.findAllById(dto.getEmployeeIds());
+        if(!employees.isEmpty()) {
+            project.getEmployees().addAll(employees);
+        }
         Project response_project = projectRepository.save(project);
         // ✅ Convert to response DTO
         return ProjectResponseMapper.toResponse(response_project);
@@ -73,6 +80,11 @@ public class ProjectService implements IProjectService {
         project.setName(dto.getName());
         project.setDetails(dto.getDetails());
         project.setManager(manager);
+        // Add employees assigned
+        List<Employee> employees = employeeRepository.findAllById(dto.getEmployeeIds());
+        if(!employees.isEmpty()) {
+            project.getEmployees().addAll(employees);
+        }
         Project response_project = projectRepository.save(project);
         // ✅ Convert to response DTO
         return ProjectResponseMapper.toResponse(response_project);
