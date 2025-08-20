@@ -20,7 +20,7 @@ public class TaskDetailResponseMapper {
         dto.setStatus(task.getStatus());
         dto.setType(task.getType());
         dto.setAssignedTo(toEmployeeSummary(task.getAssignedTo()));
-        dto.setManagedBy(toEmployeeSummary(task.getManagedBy()));
+        dto.setManagedBy(toEmployeeSummary(task.getProject().getManager()));
         dto.setStartDate(task.getStartDate());
         dto.setEndDate(task.getEndDate());
         dto.setCreatedBy(toEmployeeSummary(task.getCreatedBy()));

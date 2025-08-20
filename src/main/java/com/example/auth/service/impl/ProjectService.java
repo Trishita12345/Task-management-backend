@@ -1,6 +1,7 @@
 package com.example.auth.service.impl;
 
 import com.example.auth.constants.Constants;
+import com.example.auth.model.Task;
 import com.example.auth.model.dto.project.ProjectAddRequestDTO;
 import com.example.auth.model.dto.project.ProjectResponseDTO;
 import com.example.auth.model.Employee;
@@ -8,6 +9,7 @@ import com.example.auth.model.Project;
 import com.example.auth.model.mapper.ProjectResponseMapper;
 import com.example.auth.repository.IEmployeeRepository;
 import com.example.auth.repository.IProjectRepository;
+import com.example.auth.repository.ITaskRepository;
 import com.example.auth.repository.predicate.ProjectPredicate;
 import com.example.auth.service.IEmployeeService;
 import com.example.auth.service.IProjectService;
@@ -18,7 +20,9 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.lang.reflect.Array;
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 public class ProjectService implements IProjectService {
@@ -29,6 +33,8 @@ public class ProjectService implements IProjectService {
     private IEmployeeService employeeService;
     @Autowired
     private IEmployeeRepository employeeRepository;
+    @Autowired
+    private ITaskRepository taskRepository;
 
     @Override
     public Page<ProjectResponseDTO> getProjects(String query, Pageable pageable) {
@@ -74,6 +80,7 @@ public class ProjectService implements IProjectService {
     @Transactional
     @Override
     public ProjectResponseDTO updateProject(UUID projectId, ProjectAddRequestDTO dto) {
+        Employee currentUser = SecurityUtil.getCurrentEmployee();
         Employee manager = employeeRepository.findById(dto.getManagerId())
                 .orElseThrow(() -> new NoSuchElementException("Manager not found"));
         Project project = projectRepository.findById(projectId).orElseThrow(() -> new NoSuchElementException(Constants.PROJECT_NOT_FOUND));
@@ -81,14 +88,26 @@ public class ProjectService implements IProjectService {
         project.setDetails(dto.getDetails());
         project.setManager(manager);
         // Add employees assigned
-        List<Employee> employees = employeeRepository.findAllById(dto.getEmployeeIds());
-        if(!employees.isEmpty()) {
-            project.getEmployees().addAll(employees);
-        }
+        Set<Employee> employees = new HashSet<>(employeeRepository.findAllById(dto.getEmployeeIds()));
+        employees.add(currentUser); employees.add(manager);
+        // Need to remove employees assigned tasks which are in same project
+        Set<Employee> employeesUnassigned = project.getEmployees()
+                .stream().filter(employee -> !employees.contains(employee))
+                .collect(Collectors.toSet());
+        // get tasks to update
+        List<Task> tasksUpdated = project.getTasks().stream().filter(task ->
+                employeesUnassigned.contains(task.getAssignedTo())
+        ).peek(task -> task.setAssignedTo(null)).toList();
+        // save updatedTasks
+        taskRepository.saveAll(tasksUpdated);
+        // set employees in Project
+        project.setEmployees(employees);
+        // save Project
         Project response_project = projectRepository.save(project);
         // ✅ Convert to response DTO
         return ProjectResponseMapper.toResponse(response_project);
     }
+
 
     @Override
     public ProjectResponseDTO getProjectById(UUID projectId) {

@@ -44,7 +44,7 @@ public class ProjectController {
     @PreAuthorize("hasAuthority('VIEW_PROJECTS')")
     @GetMapping(path="/{projectId}")
     @Operation(summary = "Get Projects by id")
-    public ResponseEntity<ProjectResponseDTO> getProjectById(@Valid @PathVariable @NotNull @Positive UUID projectId) {
+    public ResponseEntity<ProjectResponseDTO> getProjectById(@Valid @PathVariable @NotNull UUID projectId) {
         return ResponseEntity.ok(projectService.getProjectById(projectId));
     }
 
@@ -59,7 +59,7 @@ public class ProjectController {
     @PreAuthorize("hasAuthority('EDIT_PROJECTS')")
     @PatchMapping("/{projectId}")
     @Operation(summary = "Edit Project by project id")
-    public ResponseEntity<ProjectResponseDTO> updateProject(@Valid @PathVariable @NotNull @Positive UUID projectId, @Valid @RequestBody ProjectAddRequestDTO dto) {
+    public ResponseEntity<ProjectResponseDTO> updateProject(@Valid @PathVariable @NotNull UUID projectId, @Valid @RequestBody ProjectAddRequestDTO dto) {
         ProjectResponseDTO response = projectService.updateProject(projectId, dto);
         return ResponseEntity.ok(response);
     }

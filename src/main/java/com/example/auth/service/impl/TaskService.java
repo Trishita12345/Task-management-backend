@@ -84,7 +84,6 @@ public class TaskService implements ITaskService {
         newTask.setPriority(taskAddRequestDTO.getPriority());
         newTask.setType(taskAddRequestDTO.getType());
         newTask.setAssignedTo(employee);
-        newTask.setManagedBy(project.getManager());
         newTask.setProject(project);
         newTask.setStartDate(taskAddRequestDTO.getStartDate());
         newTask.setEndDate(taskAddRequestDTO.getEndDate());

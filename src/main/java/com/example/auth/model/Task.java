@@ -49,11 +49,6 @@ public class Task extends AuditEntity {
     @JoinColumn(name = "assigned_to")
     private Employee assignedTo;
 
-    // ✅ Managed by Employee
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "managed_by")
-    private Employee managedBy;
-
     // ✅ Belongs to Project
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "project_id")
