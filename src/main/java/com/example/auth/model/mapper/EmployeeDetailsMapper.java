@@ -5,6 +5,7 @@ import com.example.auth.model.dto.employee.EmployeeDetailsResponseDTO;
 import com.example.auth.model.dto.project.EmployeeSummaryDTO;
 import com.example.auth.model.Employee;
 import com.example.auth.model.dto.role.RoleResponseDTO;
+import org.springframework.beans.BeanUtils;
 
 public class EmployeeDetailsMapper {
     public static EmployeeSummaryDTO toEmployeeSummary(Employee employee) {
@@ -22,18 +23,9 @@ public class EmployeeDetailsMapper {
         return dto;
     }
     public static EmployeeDetailsResponseDTO toEmployeeDetails(Employee employee) {
-        if (employee == null) return null;
-
-        return EmployeeDetailsResponseDTO.builder()
-                .empId(employee.getId())
-                .firstname(employee.getFirstname())
-                .lastname(employee.getLastname())
-                .email(employee.getEmail())
-                .profileImage(employee.getProfileImage())
-                .role(RoleResponseDTO.builder()
-                        .roleId(employee.getRole().getId())
-                        .name(employee.getRole().getName()).build())
-                .permissions(employee.getRole().getPermissions().stream().map(Permission::getName).toList())
-                .build();
+        EmployeeDetailsResponseDTO dto = new EmployeeDetailsResponseDTO();
+        BeanUtils.copyProperties(toEmployeeSummary(employee), dto); // copies base fields
+        dto.setPermissions(employee.getRole().getPermissions().stream().map(Permission::getName).toList());
+        return dto;
     }
 }

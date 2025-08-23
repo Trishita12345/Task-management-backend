@@ -7,7 +7,7 @@ public enum TaskStatus implements SelectOption<String>{
     TODO("To Do"),
     IN_PROGRESS("In Progress"),
     QA("QA"),
-    COMPLETED("Completed");
+    COMPLETED("Done");
 
     private final String label;
     private final String value;

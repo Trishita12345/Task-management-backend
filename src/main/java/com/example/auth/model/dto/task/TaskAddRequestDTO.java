@@ -23,10 +23,9 @@ import java.util.UUID;
 public class TaskAddRequestDTO {
 
     @NotBlank
-    @Size(max = 100, message = "Task name must be at most 100 characters")
+    @Size(max = 200, message = "Task name must be at most 200 characters")
     private String taskName;
 
-    @NotBlank
     @Size(max = 2000, message = "Task details must be at most 2000 characters")
     private String taskDescription;
 
