@@ -70,7 +70,7 @@ public class TaskService implements ITaskService {
             employee = employeeRepository.findById(taskAddRequestDTO.getAssignedTo())
                     .orElseThrow(() -> new NoSuchElementException("Assignee not found"));
         }
-        if (taskAddRequestDTO.getStartDate().isAfter(taskAddRequestDTO.getEndDate())) {
+        if (taskAddRequestDTO.getStartDate() != null && taskAddRequestDTO.getEndDate() != null && taskAddRequestDTO.getStartDate().isAfter(taskAddRequestDTO.getEndDate())) {
             throw new IllegalArgumentException("Start date cannot be after end date.");
         }
         Task newTask = taskAddDTOToEntity(taskAddRequestDTO, employee, project);

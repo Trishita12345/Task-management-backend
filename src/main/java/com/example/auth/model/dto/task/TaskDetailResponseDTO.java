@@ -8,6 +8,7 @@ import com.example.auth.model.enums.TaskType;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
@@ -24,8 +25,8 @@ public class TaskDetailResponseDTO {
     private EmployeeSummaryDTO assignedTo;
     private EmployeeSummaryDTO managedBy;
 //    private Project project;
-    private LocalDateTime startDate;
-    private LocalDateTime endDate;
+    private LocalDate startDate;
+    private LocalDate endDate;
     private EmployeeSummaryDTO createdBy;
     private EmployeeSummaryDTO updatedBy;
     private LocalDateTime createdAt;

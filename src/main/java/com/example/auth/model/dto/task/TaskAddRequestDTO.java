@@ -6,14 +6,13 @@ import com.example.auth.model.Project;
 import com.example.auth.model.enums.Priority;
 import com.example.auth.model.enums.TaskStatus;
 import com.example.auth.model.enums.TaskType;
+import jakarta.annotation.Nullable;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.FutureOrPresent;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Size;
+import jakarta.validation.constraints.*;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Set;
 import java.util.UUID;
@@ -37,13 +36,12 @@ public class TaskAddRequestDTO {
 
     private UUID assignedTo;
 
-//    private Employee managedBy;
-//    private Project project;
-
+    @Nullable
     @FutureOrPresent(message = "Start date cannot be in the past")
-    private LocalDateTime startDate;
+    private LocalDate startDate;
 
+    @Nullable
     @FutureOrPresent(message = "End date cannot be in the past")
-    private LocalDateTime endDate;
+    private LocalDate endDate;
 
 }
