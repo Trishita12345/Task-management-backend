@@ -103,10 +103,14 @@ public class TaskService implements ITaskService {
                 throw new IllegalArgumentException("taskId cannot be updated");
 
             case "assignedTo": // Foreign key - User
-                UUID userId = UUID.fromString(value.toString());
-                Employee user = employeeRepository.findById(userId)
-                        .orElseThrow(() -> new EntityNotFoundException("Employee not found"));
-                task.setAssignedTo(user);
+                if(value == null){
+                    task.setAssignedTo(null);
+                } else {
+                    UUID userId = UUID.fromString(value.toString());
+                    Employee user = employeeRepository.findById(userId)
+                            .orElseThrow(() -> new EntityNotFoundException("Employee not found"));
+                    task.setAssignedTo(user);
+                }
                 break;
 
             case "priority": // Enum
