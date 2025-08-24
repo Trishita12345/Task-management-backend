@@ -21,6 +21,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.lang.reflect.Field;
+import java.time.LocalDate;
 import java.util.*;
 
 @Service
@@ -119,7 +120,12 @@ public class TaskService implements ITaskService {
             case "type": // Enum
                 task.setType(TaskType.valueOf(value.toString().toUpperCase()));
                 break;
-
+            case "startDate":
+                task.setStartDate(LocalDate.parse(value.toString()));
+                break;
+            case "endDate":
+                task.setEndDate(LocalDate.parse(value.toString()));
+                break;
             default: // Regular field via reflection
                 try {
                     Field field = Task.class.getDeclaredField(fieldName);
