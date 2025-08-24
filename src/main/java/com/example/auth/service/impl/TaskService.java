@@ -97,13 +97,13 @@ public class TaskService implements ITaskService {
         Task task = taskExistInProject(projectId, taskId);
         String fieldName = taskEditRequestDTO.getKey();
         Object value = taskEditRequestDTO.getValue();
-
+        System.out.println("value:"+ value.toString());
         switch (fieldName) {
             case "taskId": // Immutable field
                 throw new IllegalArgumentException("taskId cannot be updated");
 
             case "assignedTo": // Foreign key - User
-                if(value == null){
+                if(value.equals("null")){
                     task.setAssignedTo(null);
                 } else {
                     UUID userId = UUID.fromString(value.toString());
