@@ -21,14 +21,15 @@ public class CommentController {
     @Autowired
     private ICommentService commentService;
 
-    @GetMapping("/page/{taskId}/{page}")
+    @GetMapping("/page/{taskId}")
     @PreAuthorize("hasAuthority('VIEW_TASKS')")
     @Operation(summary = "Get Comments by taskId paginated")
     public ResponseEntity<Page<CommentResponseDTO>> getAllCommentsByTaskId(
             @Valid @PathVariable @NotNull UUID taskId,
-            @Valid @PathVariable(required = false) Integer page
+            @Valid @RequestParam(required = false, defaultValue = "0") Integer page,
+            @Valid @RequestParam(required = false, defaultValue = "desc") String direction
     ){
-        return ResponseEntity.ok(commentService.getCommentsByTaskId(taskId, page));
+        return ResponseEntity.ok(commentService.getCommentsByTaskId(taskId, page, direction));
     }
 
     @PostMapping(path = "/{taskId}")

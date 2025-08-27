@@ -4,10 +4,10 @@ import lombok.Getter;
 
 @Getter
 public enum TaskStatus implements SelectOption<String>{
-    TODO("To Do"),
-    IN_PROGRESS("In Progress"),
+    TODO("NEW"),
+    IN_PROGRESS("IN PROGRESS"),
     QA("QA"),
-    COMPLETED("Done");
+    COMPLETED("CLOSED");
 
     private final String label;
     private final String value;

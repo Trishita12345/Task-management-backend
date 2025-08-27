@@ -10,5 +10,5 @@ public interface ICommentService {
     CommentResponseDTO addComment(UUID taskId, CommentRequestDTO commentRequestDTO);
     CommentResponseDTO editComment(UUID taskId, UUID commentId, CommentRequestDTO commentRequestDTO);
     void deleteComment(UUID taskId, UUID commentId);
-    Page<CommentResponseDTO> getCommentsByTaskId(UUID taskId, Integer page);
+    Page<CommentResponseDTO> getCommentsByTaskId(UUID taskId, Integer page, String direction);
 }

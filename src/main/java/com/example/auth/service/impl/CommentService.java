@@ -58,8 +58,13 @@ public class CommentService implements ICommentService {
     }
 
     @Override
-    public Page<CommentResponseDTO> getCommentsByTaskId(UUID taskId, Integer page) {
-        Sort sort = Sort.by("createdAt").descending();
+    public Page<CommentResponseDTO> getCommentsByTaskId(UUID taskId, Integer page, String direction) {
+        Sort sort = Sort.by("createdAt");
+        if(direction.equals("desc")){
+            sort.descending();
+        } else {
+            sort.ascending();
+        }
         Pageable pageable = PageRequest.of(page, 5, sort);
         Task task = taskRepository.findById(taskId)
                 .orElseThrow(() -> new NoSuchElementException("Task not found"));
