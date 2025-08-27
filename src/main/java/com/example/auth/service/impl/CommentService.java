@@ -59,11 +59,12 @@ public class CommentService implements ICommentService {
 
     @Override
     public Page<CommentResponseDTO> getCommentsByTaskId(UUID taskId, Integer page, String direction) {
-        Sort sort = Sort.by("createdAt");
-        if(direction.equals("desc")){
-            sort.descending();
+        Sort sort;
+        System.out.println("direction: " + direction);
+        if ("desc".equalsIgnoreCase(direction)) {
+            sort = Sort.by(Sort.Direction.DESC, "createdAt");
         } else {
-            sort.ascending();
+            sort = Sort.by(Sort.Direction.ASC, "createdAt");
         }
         Pageable pageable = PageRequest.of(page, 5, sort);
         Task task = taskRepository.findById(taskId)
