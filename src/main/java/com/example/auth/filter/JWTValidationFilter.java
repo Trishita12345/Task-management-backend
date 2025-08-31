@@ -37,10 +37,15 @@ public class JWTValidationFilter extends OncePerRequestFilter {
         String token = extractJWTTokenFromRequest(request);
         if(token != null){
             JWTAuthenticationToken jwtAuthenticationToken = new JWTAuthenticationToken(token);
-            Authentication authResult = authenticationManager.authenticate(jwtAuthenticationToken);
-            if(authResult.isAuthenticated()) {
-                SecurityContextHolder.getContext().setAuthentication(authResult);
-                filterChain.doFilter(request, response);
+            try{
+                Authentication authResult = authenticationManager.authenticate(jwtAuthenticationToken);
+                if(authResult.isAuthenticated()) {
+                    SecurityContextHolder.getContext().setAuthentication(authResult);
+                    filterChain.doFilter(request, response);
+                }
+            } catch (Exception ex){
+                response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+                response.getWriter().write("Invalid credentials");
             }
         } else {
             response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);

@@ -3,8 +3,8 @@ package com.example.auth.constants;
 import java.util.List;
 
 public class Constants {
-    public static final int REFRESH_TOKEN_EXPIRATION_TIME = 7 * 24 * 60 * 60;
-    public static final int ACCESS_TOKEN_EXPIRATION_TIME = 2 * 60;
+    public static final int REFRESH_TOKEN_EXPIRATION_TIME = 2 * 24 * 60; // 2 days
+    public static final int ACCESS_TOKEN_EXPIRATION_TIME = 2; // 2 minutes
     public static final String JWT_SECRET = "your-secret-key-your-secret-key-your-secret-key-your-secret-key-your-secret-key";
     public static final String TYPE = "type";
     public static final String FIELD = "field";
