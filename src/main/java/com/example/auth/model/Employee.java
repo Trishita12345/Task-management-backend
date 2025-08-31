@@ -3,16 +3,15 @@ package com.example.auth.model;
 import com.example.auth.constants.Constants;
 import com.example.auth.model.enums.SelectOption;
 import jakarta.persistence.*;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.proxy.HibernateProxy;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.Set;
-import java.util.UUID;
+import java.util.*;
 
 @Entity
 @Getter
@@ -115,7 +114,21 @@ public class Employee implements UserDetails, SelectOption<UUID> {
     }
 
 
+    @Override
+    public final boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null) return false;
+        Class<?> oEffectiveClass = o instanceof HibernateProxy ? ((HibernateProxy) o).getHibernateLazyInitializer().getPersistentClass() : o.getClass();
+        Class<?> thisEffectiveClass = this instanceof HibernateProxy ? ((HibernateProxy) this).getHibernateLazyInitializer().getPersistentClass() : this.getClass();
+        if (thisEffectiveClass != oEffectiveClass) return false;
+        Employee employee = (Employee) o;
+        return getId() != null && Objects.equals(getId(), employee.getId());
+    }
 
+    @Override
+    public final int hashCode() {
+        return this.getId().hashCode();
+    }
 }
 
 

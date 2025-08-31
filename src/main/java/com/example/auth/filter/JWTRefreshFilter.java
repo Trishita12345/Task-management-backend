@@ -46,13 +46,14 @@ public class JWTRefreshFilter extends OncePerRequestFilter {
         Authentication authResult = authenticationManager.authenticate(authenticationToken);
         if(authResult.isAuthenticated()){
             String token = JWTUtil.generateToken(authResult,  Constants.ACCESS);
-           // response.setHeader("Authorization", "Bearer " +token);
-            Cookie accessCookie = new Cookie(Constants.ACCESS, token);
+            response.setHeader("Authorization", "Bearer " +token);
+            // access token set in cookie
+            /* Cookie accessCookie = new Cookie(Constants.ACCESS, token);
             accessCookie.setHttpOnly(false); //javascript can access it
             accessCookie.setSecure(false); // sent only over HTTPS
             accessCookie.setPath("/"); // Cookie available for all endpoints
             accessCookie.setMaxAge(Constants.ACCESS_TOKEN_EXPIRATION_TIME); // 1 days expiry
-            response.addCookie(accessCookie);
+            response.addCookie(accessCookie); */
             //Refresh token
             String refreshTokenNew = JWTUtil.generateToken(authResult,Constants.REFRESH);
             Cookie refreshCookie = new Cookie(Constants.REFRESH, refreshTokenNew);

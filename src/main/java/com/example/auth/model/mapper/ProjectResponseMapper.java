@@ -1,9 +1,12 @@
 package com.example.auth.model.mapper;
 
+import com.example.auth.model.dto.project.EmployeeSummaryDTO;
 import com.example.auth.model.dto.project.ProjectResponseDTO;
 import com.example.auth.model.Project;
 
 import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.List;
 
 import static com.example.auth.model.mapper.EmployeeDetailsMapper.toEmployeeSummary;
 
@@ -25,9 +28,11 @@ public class ProjectResponseMapper {
 
         // ✅ Map employees
         if (project.getEmployees() != null) {
-            dto.setEmployees(project.getEmployees().stream()
+            List<EmployeeSummaryDTO> employeeSummaryDTOS = new ArrayList<>(project.getEmployees().stream()
                     .map(EmployeeDetailsMapper::toEmployeeSummary)
                     .toList());
+            employeeSummaryDTOS.sort(Comparator.comparing(EmployeeSummaryDTO::getEmail));
+            dto.setEmployees(employeeSummaryDTOS);
         } else {
             dto.setEmployees(new ArrayList<>());
         }
