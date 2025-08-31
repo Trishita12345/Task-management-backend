@@ -5,6 +5,11 @@ services:
     image: postgres:16
     container_name: postgres-container
     restart: always
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U user -d testdb" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
     environment:
       POSTGRES_USER: user
       POSTGRES_PASSWORD: pass123
@@ -25,6 +30,22 @@ services:
       - "5050:80"
     depends_on:
       - postgres
+
+  springboot-app:
+    image: task-management-be:latest   # 👈 use your built image here
+    container_name: springboot-container
+    build:
+      context: .                      # 👈 path to your Dockerfile
+      dockerfile: Dockerfile
+    ports:
+      - "8080:8080"
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/testdb
+      SPRING_DATASOURCE_USERNAME: user
+      SPRING_DATASOURCE_PASSWORD: pass123
+    depends_on:
+      postgres:
+        condition: service_healthy     # 👈 wait until Postgres is healthy
 
 volumes:
   postgres_data:
