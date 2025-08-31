@@ -54,6 +54,7 @@ public class JWTUtil {
         }
     }
 
+
     public static String extractJWTTokenFromRequestCookie(HttpServletRequest request, String cookieName) {
         Cookie[] cookies = request.getCookies();
         if (cookies == null) {
