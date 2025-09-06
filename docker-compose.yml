@@ -40,7 +40,7 @@ services:
       SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/testdb
       SPRING_DATASOURCE_USERNAME: user
       SPRING_DATASOURCE_PASSWORD: pass123
-      FRONTEND_URL: http://localhost:5173
+      FRONTEND_URL: http://frontend-app:5173
     depends_on:
       postgres:
         condition: service_healthy     # 👈 wait until Postgres is healthy
