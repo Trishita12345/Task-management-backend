@@ -5,6 +5,7 @@ import com.example.auth.filter.JWTRefreshFilter;
 import com.example.auth.filter.JWTValidationFilter;
 import com.example.auth.util.PublicEndPoints;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.Customizer;
@@ -25,6 +26,9 @@ import java.util.List;
 @EnableWebSecurity(debug = true)
 @EnableMethodSecurity(prePostEnabled = true)
 public class SecurityConfig {
+
+    @Value("${frontend.url}") // fallback if not set
+    private String allowedOrigin;
 
     @Autowired
     private JWTAuthenticationFilter jwtAuthenticationFilter;
@@ -53,7 +57,7 @@ public class SecurityConfig {
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
-        configuration.setAllowedOrigins(List.of("http://localhost:5173")); // Your Vite frontend URL
+        configuration.setAllowedOrigins(List.of(allowedOrigin)); // Your Vite frontend URL
         configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS","PATCH"));
         configuration.setAllowedHeaders(List.of("*"));
         configuration.setAllowCredentials(true); // if using cookies / auth headers

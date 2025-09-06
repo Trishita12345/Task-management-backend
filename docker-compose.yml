@@ -31,18 +31,16 @@ services:
     depends_on:
       - postgres
 
-  springboot-app:
-    image: task-management-be:latest   # 👈 use your built image here
+  backend-app:
+    image: trishita1902/task-management-be   # 👈 use your built image here
     container_name: springboot-container
-    build:
-      context: .                      # 👈 path to your Dockerfile
-      dockerfile: Dockerfile
     ports:
       - "8080:8080"
     environment:
       SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/testdb
       SPRING_DATASOURCE_USERNAME: user
       SPRING_DATASOURCE_PASSWORD: pass123
+      FRONTEND_URL: http://localhost:5173
     depends_on:
       postgres:
         condition: service_healthy     # 👈 wait until Postgres is healthy
