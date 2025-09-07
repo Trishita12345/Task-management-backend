@@ -1,11 +1,27 @@
-# Step 1: Use a base image with Java
-FROM openjdk:17-jdk-slim
+# ====== Stage 1: Build the JAR ======
+FROM maven:3.9.6-eclipse-temurin-17 AS build
 
-# Step 2: Set working directory inside container
+# Set working directory
 WORKDIR /app
 
-# Step 3: Copy the jar file into the container
-COPY target/task-management-be-0.0.1-SNAPSHOT.jar app.jar
+# Copy pom.xml and download dependencies (cached layer)
+COPY pom.xml .
+RUN mvn dependency:go-offline
 
-# Step 4: Tell Docker how to run the jar
+# Copy source code
+COPY src ./src
+
+# Build the application (creates jar inside target/)
+RUN mvn clean install -DskipTests
+
+# ====== Stage 2: Run the JAR ======
+FROM openjdk:17-jdk-slim
+
+# Set working directory
+WORKDIR /app
+
+# Copy the jar from the build stage
+COPY --from=build /app/target/task-management-be-0.0.1-SNAPSHOT.jar app.jar
+
+# Run the jar
 ENTRYPOINT ["java", "-jar", "app.jar"]
