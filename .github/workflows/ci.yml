@@ -57,7 +57,7 @@ jobs:
       - name: Deploy to EC2
         run: |
           ssh ec2-user@${{ secrets.EC2_HOST }} "
-            cd /home/ec2-user/frontend &&
+            cd /home/ec2-user/backend &&
             docker compose pull &&
             docker compose up -d --remove-orphans
           "
