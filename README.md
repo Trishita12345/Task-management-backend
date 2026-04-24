@@ -6,7 +6,7 @@ A full-stack Task Management application designed to help users efficiently orga
 
 ## 🎥 Demo Video
 
-![Task Management Demo](./demo/demo.gif)
+https://github.com/user-attachments/assets/aba6bb6d-5a3a-452d-8170-85c2709a5b7c
 
 ## Swagger UI
 
