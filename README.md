@@ -6,15 +6,11 @@ A full-stack Task Management application designed to help users efficiently orga
 
 ## 🎥 Demo Video
 
-<iframe width="100%" height="600" src="https://youtu.be/qrgxLxdeJZk" 
-frameborder="0" allowfullscreen></iframe>
+![Task Management Demo](./demo/demo.gif)
 
 ## Swagger UI
 
-<iframe width="100%" height="600" src="https://youtu.be/75E66s3IbQc" 
-frameborder="0" allowfullscreen></iframe>
-
-> 📌 Play these videos to see the application workflow including task creation, updates, and management.
+![Swagger UI Demo](./demo/swagger-demo.gif)
 
 ---
 
