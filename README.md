@@ -4,25 +4,30 @@ A full-stack Task Management application designed to help users efficiently orga
 
 ---
 
-## 🎥 Demo
+## 🎥 Demo Video
 
-🔗 **Watch Demo Video:**
-[https://github.com/Trishita12345/TaskManagementSystem_UI/blob/main/Screen%20Recording%202026-04-24%20at%204.53.27%20PM.mov](https://github.com/Trishita12345/TaskManagementSystem_UI/blob/main/Screen%20Recording%202026-04-24%20at%204.53.27%20PM.mov)
+<iframe width="100%" height="600" src="https://youtu.be/qrgxLxdeJZk" 
+frameborder="0" allowfullscreen></iframe>
 
-> 📌 Open the link to see the application workflow including task creation, updates, and management.
+## Swagger UI
+
+<iframe width="100%" height="600" src="https://youtu.be/75E66s3IbQc" 
+frameborder="0" allowfullscreen></iframe>
+
+> 📌 Play these videos to see the application workflow including task creation, updates, and management.
 
 ---
 
 ## 🚀 Features
 
-* 🔐 User Authentication (Login / Signup)
-* 📝 Create, Update, Delete Tasks
-* 📌 Task Prioritization & Status Tracking
-* 📅 Deadline / Due Date Management
-* 🔍 Search & Filter Tasks
-* 📊 Organized task view for better productivity
-* 🌐 RESTful API integration
-* 📱 Responsive UI
+- 🔐 User Authentication (Login / Signup)
+- 📝 Create, Update, Delete Tasks
+- 📌 Task Prioritization & Status Tracking
+- 📅 Deadline / Due Date Management
+- 🔍 Search & Filter Tasks
+- 📊 Organized task view for better productivity
+- 🌐 RESTful API integration
+- 📱 Responsive UI
 
 ---
 
@@ -30,23 +35,23 @@ A full-stack Task Management application designed to help users efficiently orga
 
 ### Frontend
 
-* ⚛️ React.js
-* 🎨 CSS / Bootstrap / Tailwind (update if needed)
-* 🔄 Axios for API calls
+- ⚛️ React.js
+- 🎨 CSS / Bootstrap / Tailwind (update if needed)
+- 🔄 Axios for API calls
 
 ### Backend
 
-* ☕ Spring Boot
-* 🌐 REST API (Spring MVC)
-* 🗄️ PostgreSQL
-* 🔐 Spring Security (JWT-based Authentication)
-* 📄 Swagger (API Documentation)
+- ☕ Spring Boot
+- 🌐 REST API (Spring MVC)
+- 🗄️ PostgreSQL
+- 🔐 Spring Security (JWT-based Authentication)
+- 📄 Swagger (API Documentation)
 
 ### DevOps & Tools
 
-* 🔄 CI/CD Pipeline (configured)
-* 🐙 Git & GitHub
-* ☁️ AWS (planned deployment)
+- 🔄 CI/CD Pipeline (configured)
+- 🐙 Git & GitHub
+- ☁️ AWS (planned deployment)
 
 ---
 
@@ -139,20 +144,20 @@ http://localhost:8080/swagger-ui/index.html
 
 ## 🔗 API Overview
 
-* `POST /api/auth/register` → Register user
-* `POST /api/auth/login` → Authenticate user
-* `GET /api/tasks` → Get all tasks
-* `POST /api/tasks` → Create task
-* `PUT /api/tasks/{id}` → Update task
-* `DELETE /api/tasks/{id}` → Delete task
+- `POST /api/auth/register` → Register user
+- `POST /api/auth/login` → Authenticate user
+- `GET /api/tasks` → Get all tasks
+- `POST /api/tasks` → Create task
+- `PUT /api/tasks/{id}` → Update task
+- `DELETE /api/tasks/{id}` → Delete task
 
 ---
 
 ## 🔄 CI/CD Pipeline
 
-* CI/CD pipeline is configured for automated builds and integration.
-* Supports future deployment workflows.
-* Ready for integration with cloud platforms like AWS.
+- CI/CD pipeline is configured for automated builds and integration.
+- Supports future deployment workflows.
+- Ready for integration with cloud platforms like AWS.
 
 > 🚧 Note: Deployment to AWS is planned but not currently active.
 
@@ -160,22 +165,22 @@ http://localhost:8080/swagger-ui/index.html
 
 ## 💡 Key Highlights
 
-* Clean full-stack architecture (React + Spring Boot)
-* Secure authentication with JWT
-* Scalable backend with layered architecture
-* PostgreSQL for reliable data persistence
-* Integrated API documentation using Swagger
-* CI/CD-ready project setup
+- Clean full-stack architecture (React + Spring Boot)
+- Secure authentication with JWT
+- Scalable backend with layered architecture
+- PostgreSQL for reliable data persistence
+- Integrated API documentation using Swagger
+- CI/CD-ready project setup
 
 ---
 
 ## 🚀 Future Enhancements
 
-* ☁️ AWS Deployment (EC2 / S3 / RDS)
-* 🔔 Notifications & reminders
-* 📊 Dashboard & analytics
-* 👥 Team collaboration features
-* 🌙 Dark mode UI
+- ☁️ AWS Deployment (EC2 / S3 / RDS)
+- 🔔 Notifications & reminders
+- 📊 Dashboard & analytics
+- 👥 Team collaboration features
+- 🌙 Dark mode UI
 
 ---
 
